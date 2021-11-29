@@ -26,7 +26,7 @@
                 aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="../index.php">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="index.php">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
@@ -36,7 +36,7 @@
                             <li>
                                 <hr class="dropdown-divider" />
                             </li>
-                            <li><a class="dropdown-item" href="room_list.php?roomtpye='#'">팬션</a></li>
+                            <li><a class="dropdown-item" href="room_list.php">팬션</a></li>
                             <li><a class="dropdown-item" href="room_list.php">호텔</a></li>
                             <li><a class="dropdown-item" href="room_list.php">모텔</a></li>
                             <li><a class="dropdown-item" href="room_list.php">풀빌라</a></li>
@@ -44,18 +44,63 @@
                         </ul>
                     </li>
                 </ul>
-                <form class="d-flex">
-                    <button class="btn btn-outline-dark" type="submit">
-                        <i class="bi-cart-fill me-1"></i>
-                        Cart
-                        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                    </button>
-                </form>
                 <form class="d-flex ms-1">
+                    <?php
+                            session_start(); //세션
+                            if($_SESSION['userId'] == null){ //로그인전
+                                ?>
                     <button class="btn btn-outline-dark" type="button" onclick="location.href='login.php'">
-                    <i class="bi bi-box-arrow-in-right me-1"></i>
-                    LOGIN
+                        <i class="bi bi-box-arrow-in-right me-1"></i>
+                        LOGIN
                     </button>
+                    <?php
+                            } else {  //로그인후
+                                if($_SESSION['usergroups']=='user'){ //일반유저일떄
+                    ?>
+                    <button class="btn btn-outline-dark ms-2" type="button" onclick="location.href='web/mypage.php'">
+                        <?php echo $_SESSION['userId'] ?>&nbsp;님
+                    </button>
+                    <button class="btn btn-outline-dark ms-1" type="button" onclick="location.href='php/logout.php'">
+                        <i class="bi bi-box-arrow-in-right me-1"></i>
+                        LOGOUT
+                    </button>
+                    <script>
+                        alert("이미로그인 되어있습니다")
+                        location.href = "../index.php";
+                    </script>
+                    <?php            
+                                }else if($_SESSION['usergroups']=='business'){ //비지니스회원일떄
+                                ?>
+                    <button class="btn btn-outline-dark ms-2" type="button" onclick="location.href='web/business.php'">
+                        <?php echo $_SESSION['userId'] ?>&nbsp;님
+                    </button>
+
+                    <button class="btn btn-outline-dark ms-1" type="button" onclick="location.href='php/logout.php'">
+                        <i class="bi bi-box-arrow-in-right me-1"></i>
+                        LOGOUT
+                    </button>
+                    <script>
+                        alert("이미로그인 되어있습니다")
+                        location.href = "../index.php";
+                    </script>
+                    <?php
+                                }else { //관리자일때
+                                ?>
+                    <button class="btn btn-outline-dark ms-2" type="button" onclick="location.href='web/admin.php'">
+                        <?php echo $_SESSION['userId'] ?>&nbsp;님
+                    </button>
+                    <button class="btn btn-outline-dark ms-1" type="button" onclick="location.href='php/logout.php'">
+                        <i class="bi bi-box-arrow-in-right me-1"></i>
+                        LOGOUT
+                    </button>
+                    <script>
+                        alert("이미로그인 되어있습니다")
+                        location.href = "../index.php";
+                    </script>
+                    <?php
+                                }
+                            }
+                        ?>
                 </form>
             </div>
         </div>
@@ -74,11 +119,13 @@
             <div class="row">
                 <form method="POST" action="../php/login_select.php" id="login-form" class="validation-form">
                     <div class="form-floating justify-content-center mb-2">
-                        <input type="email" class="form-control" name="email" id="floatingemail" placeholder="name@example.com">
+                        <input type="email" class="form-control" name="email" id="floatingemail"
+                            placeholder="name@example.com">
                         <label for="floatingemail">이메일</label>
                     </div>
                     <div class="form-floating mb-4">
-                        <input type="password" class="form-control" name="password" id="floatingPassword" placeholder="Password">
+                        <input type="password" class="form-control" name="password" id="floatingPassword"
+                            placeholder="Password">
                         <label for="floatingPassword">비밀번호</label>
                     </div>
                     <div class="row">
@@ -89,11 +136,12 @@
                     </div>
                 </form>
                 <div class="d-flex mb-2">
-                    <button class="w-100 btn btn-lg btn-info btn-space" type="button" onclick="location.href='./signup.php'">회원가입</button>
+                    <button class="w-100 btn btn-lg btn-info btn-space" type="button"
+                        onclick="location.href='./signup.php'">회원가입</button>
                 </div>
             </div>
         </div>
-        
+
     </section>
     <!-- Footer-->
     <footer class="py-5 bg-dark fixed-bottom">
