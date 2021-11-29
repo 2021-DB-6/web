@@ -1,8 +1,3 @@
-<?php
-
-
-?>
-
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -69,60 +64,53 @@
     <header class="bg-dark py-5">
         <div class="container px-4 px-lg-5 my-5">
             <div class="text-center text-white">
-                <h1 class="display-4 fw-bolder">비지니스 회원가입</h1>
+                <h1 class="display-4 fw-bolder">회원가입</h1>
             </div>
         </div>
     </header>
     <!-- Section-->
     <section class="py-5">
         <div>
-            <?php
-                    include '../DB/db.php';
-            ?>
             <div class="container">
                 <div class="input-form-backgroud row">
                     <div class="input-form col-md-12 mx-auto">
-                        <form class="validation-form" novalidate>
+                        <form class="validation-form" id="signupform" method="post" action="../php/signup_insert.php" novalidate >
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="name">회사명</label>
-                                    <input type="text" class="form-control" id="name" placeholder="" value="" required />
-                                    <div class="invalid-feedback">상호을 입력해주세요.</div>
+                                    <label for="name">이름</label>
+                                    <input type="text" class="form-control" name="name" id="name" placeholder="" value="" required />
+                                    <div class="invalid-feedback">이름을 입력해주세요.</div>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="email">대표이메일</label>
-                                    <input type="email" class="form-control" id="email" placeholder="you@example.com" required />
+                                    <label for="email">이메일</label>
+                                    <input type="email" class="form-control" name="email" id="email" placeholder="you@example.com" required />
                                     <div class="invalid-feedback">로그인 이메일을 입력해주세요.</div>
                                 </div>                                
                             </div>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="password">비밀번호</label>
-                                    <input type="password" class="form-control" id="password0" placeholder="" value="" required />
+                                    <input type="password" class="form-control" name="password0" id="password0" placeholder="" value="" required />
                                     <div class="invalid-feedback">비밀번호을 입력해주세요.</div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="password">비밀번호 재입력</label>
-                                    <input type="password" class="form-control" id="password1" placeholder="" value="" required />
+                                    <input type="password" class="form-control" name="password1" id="password1" placeholder="" value="" required />
                                     <div class="invalid-feedback">비밀번호을 입력해주세요.</div>
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <label for="address">사업지 주소</label>
-                                <input type="text" class="form-control" id="address" placeholder="서울특별시 강남구" required />
+                                <label for="address">주소</label>
+                                <input type="text" class="form-control" name="address" id="address" placeholder="서울특별시 강남구" required />
                                 <div class="invalid-feedback">주소를 입력해주세요.</div>
                             </div>
                             <div class="mb-3">
-                                <label for="addr_num">사업지 우편번호</label>
-                                <input type="text" class="form-control" id="addr_num" placeholder="우편번호5자리" />
+                                <label for="addr_num">우편번호</label>
+                                <input type="number" class="form-control" name="addr_num" id="addr_num" placeholder="5자리" />
                             </div>
                             <div class="mb-3">
-                                <label for="tell">대표 전화번호</label>
-                                <input type="text" class="form-control" id="address2" placeholder="전화번호 입력(-제외)" />
-                            </div>
-                            <div class="mb-3">
-                                <label for="tell">사업자등록번호</label>
-                                <input type="text" class="form-control" id="address2" placeholder="사업자번호 입력(-제외)" />
+                                <label for="tell">전화번호</label>
+                                <input type="number" class="form-control" name="tell" id="tell" placeholder="전화번호 입력(-제외)" />
                             </div>
                             <hr class="mb-4" />
                             <div class="custom-control custom-checkbox">
@@ -130,7 +118,7 @@
                                 <label class="custom-control-label" for="aggrement">개인정보 수집 및 이용에 동의합니다.</label>
                             </div>
                             <div class="mb-4"></div>
-                            <button class="btn btn-primary btn-lg btn-block" type="submit">
+                            <button class="btn btn-primary btn-lg btn-block" type="button" id="signupbtn">
                                 가입 완료
                             </button>
                         </form>
@@ -149,6 +137,20 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="../js/scripts.js"></script>
+    <script>
+        const signupForm = document.querySelector("#signupform");
+        const signupButton = document.querySelector("#signupbtn");
+        const password0 = document.querySelector("#password0");
+        const password1 = document.querySelector("#password1");
+        signupButton.addEventListener("click", function(e) {
+            if(password0.value&& password0.value === password1.value){
+                
+            signupForm.submit();
+            }else{
+                alert("비밀번호가 서로 일치하지 않습니다");
+            }
+        });
+    </script>
 </body>
 
 </html>

@@ -27,32 +27,67 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="index.php">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="php/about.php">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="web/about.php">About</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">숙소 상품</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="php/room_list.php">전체 숙소 목록</a></li>
+                                <li><a class="dropdown-item" href="web/room_list.php">전체 숙소 목록</a></li>
                                 <li><hr class="dropdown-divider" /></li>
-                                <li><a class="dropdown-item" href="php/room_list.php">팬션</a></li>
-                                <li><a class="dropdown-item" href="php/room_list.php">호텔</a></li>
-                                <li><a class="dropdown-item" href="php/room_list.php">모텔</a></li>
-                                <li><a class="dropdown-item" href="php/room_list.php">풀빌라</a></li>
-                                <li><a class="dropdown-item" href="php/room_list.php">리조트/콘도</a></li>
+                                <li><a class="dropdown-item" href="web/room_list.php">팬션</a></li>
+                                <li><a class="dropdown-item" href="web/room_list.php">호텔</a></li>
+                                <li><a class="dropdown-item" href="web/room_list.php">모텔</a></li>
+                                <li><a class="dropdown-item" href="web/room_list.php">풀빌라</a></li>
+                                <li><a class="dropdown-item" href="web/room_list.php">리조트/콘도</a></li>
                             </ul>
                         </li>
                     </ul>
-                    <form class="d-flex">
-                        <button class="btn btn-outline-dark" type="submit">
-                            <i class="bi-cart-fill me-1"></i>
-                            Cart
-                            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                        </button>
-                    </form>
                     <form class="d-flex ms-1">
-                        <button class="btn btn-outline-dark" type="button" onclick="location.href='php/login.php'">
-                            <i class="bi bi-box-arrow-in-right me-1"></i>
-                            LOGIN
-                        </button>
+                        <?php
+                            session_start(); //세션
+                            if($_SESSION['userId'] == null){ //로그인전
+                                ?>
+                            <button class="btn btn-outline-dark" type="button" onclick="location.href='web/login.php'">
+                                <i class="bi bi-box-arrow-in-right me-1"></i>
+                                LOGIN
+                            </button>
+                            <?php
+                            } else {  //로그인후
+                                if($_SESSION['usergroups']=='user'){ //일반유저일떄
+                                ?>
+                                    <button class="btn btn-outline-dark ms-2" type="button" onclick="location.href='web/mypage.php'">
+                                        <?php echo $_SESSION['userId'] ?>&nbsp;님
+                                    </button>
+                        
+                                    <button class="btn btn-outline-dark ms-1" type="button" onclick="location.href='php/logout.php'">
+                                        <i class="bi bi-box-arrow-in-right me-1"></i>
+                                        LOGOUT
+                                    </button>        
+                                <?php            
+                                }else if($_SESSION['usergroups']=='business'){ //비지니스회원일떄
+                                ?>
+                                    <button class="btn btn-outline-dark ms-2" type="button" onclick="location.href='web/business.php'">
+                                        <?php echo $_SESSION['userId'] ?>&nbsp;님
+                                    </button>
+                        
+                                    <button class="btn btn-outline-dark ms-1" type="button" onclick="location.href='php/logout.php'">
+                                        <i class="bi bi-box-arrow-in-right me-1"></i>
+                                        LOGOUT
+                                    </button>         
+                                <?php
+                                }else { //관리자일때
+                                ?>
+                                    <button class="btn btn-outline-dark ms-2" type="button" onclick="location.href='web/admin.php'">
+                                        <?php echo $_SESSION['userId'] ?>&nbsp;님
+                                    </button>
+                        
+                                    <button class="btn btn-outline-dark ms-1" type="button" onclick="location.href='php/logout.php'">
+                                        <i class="bi bi-box-arrow-in-right me-1"></i>
+                                        LOGOUT
+                                    </button>        
+                                <?php
+                                }
+                            }
+                        ?>
                     </form>
                 </div>
             </div>

@@ -72,25 +72,25 @@
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
             <div class="row">
-                <form id="login-form" class="validation-form">
+                <form method="POST" action="../php/login_select.php" id="login-form" class="validation-form">
                     <div class="form-floating justify-content-center mb-2">
-                        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                        <label for="floatingInput">이메일</label>
+                        <input type="email" class="form-control" name="email" id="floatingemail" placeholder="name@example.com">
+                        <label for="floatingemail">이메일</label>
                     </div>
                     <div class="form-floating mb-4">
-                        <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                        <input type="password" class="form-control" name="password" id="floatingPassword" placeholder="Password">
                         <label for="floatingPassword">비밀번호</label>
                     </div>
                     <div class="row">
                         <div class="d-flex mb-2">
-                            <button class="w-100 btn btn-lg btn-primary btn-space" type="button">로그인</button>
+                            <button class="w-100 btn btn-lg btn-primary btn-space" type="submit">로그인</button>
                         </div>
                         <br>
-                        <div class="d-flex mb-2">
-                            <button class="w-100 btn btn-lg btn-info btn-space" type="button" onclick="location.href='./signup.php'">회원가입</button>
-                        </div>
                     </div>
                 </form>
+                <div class="d-flex mb-2">
+                    <button class="w-100 btn btn-lg btn-info btn-space" type="button" onclick="location.href='./signup.php'">회원가입</button>
+                </div>
             </div>
         </div>
         
