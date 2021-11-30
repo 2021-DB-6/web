@@ -128,9 +128,9 @@
                                 }
                                 ?>
                             </span></div>
-                        <span>
+                        <h2>
                             <?= $row['user_name']; ?>
-                        </span>
+                        </h2>
                         <h1 class="display-5 fw-bolder">
                             <p>
                                 <?= $row['room_name']; ?>
@@ -152,6 +152,7 @@
                         </p>
                         <div>
                             <!--여기에 달력넣어서 예약현황 표시-->
+                            
                         </div>
                         <div class="d-flex">
                             <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem">
@@ -165,37 +166,41 @@
                 <br>
                 <hr>
                 <br>
-                <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-                <script>
-                    $('.carousel').carousel({
-                                interval: 2000 //기본 5초 }) 
-                </script>
                 <div>
                     <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-indicators">
                             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                            <?php
+                                $img_num_count = 0;
+                                for ($i = 2; $i < 6; $i = $i + 1) {
+                                    $img_num = "room_img$i";
+                                if(isset($row[$img_num])){
+                                    $img_num_count = $img_num_count+1;
+                            ?>
+                                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="<?=$img_num_count?>" aria-label="Slide <?=$img_num_count+1?>"></button>
+                            <?php
+                                } else{
+                                }
+                            }
+                            ?>
                         </div>
                         <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="<?php echo 'data:image/bmp;base64,' . base64_encode($row['room_img1']) ?>" class="d-block w-100" alt="...">
+                            </div>
                             <?php
-                            for ($i = 2; $i < 6; $i = $i + 1) {
-                                $img_num = "room_img$i";
+                            for ($ii = 2; $ii < 6; $ii = $ii + 1) {
+                                $img_num = "room_img$ii";
                                 if(isset($row[$img_num])){
-                                    
                             ?>
-                                <div class="carousel-item active">
+                                <div class="carousel-item">
                                     <img src="<?php echo 'data:image/bmp;base64,' . base64_encode($row[$img_num]) ?>" class="d-block w-100" alt="...">
                                 </div>
                             <?php
                                 } else{
-                                    
                                 }
                             }
                             ?>
-
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
