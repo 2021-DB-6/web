@@ -7,7 +7,9 @@
     $end_date = $_POST['end_date'];
     $res_pay = $_POST['res_pay'];
     
-    $sql_checkout_insert = "INSERT INTO reservation SET
+    
+    $sql_checkout_insert = "
+    INSERT INTO reservation SET
     user_id = '".$userid."',
     room_id = '".$roomid."',
     res_start = '".$start_date."',
@@ -23,6 +25,8 @@
 ?>
     <script>
         alert("예약이 완료되었습니다");
-        location.href = "mypage.php";
+        location.href = "../web/mypage.php";
     </script>
+    <?php
+    }
 ?>

@@ -105,11 +105,15 @@
                     </h4>
                     <ul class="list-group mb-3">
                         <?php 
+                            include '../php/loginchck.php'; //로그인확인
+                        
                             include '../DB/db.php';
                             $roomid = $_GET['room_id'];
                             $sql_room = "SELECT room.*, users.user_name FROM room, users WHERE room.room_id=$roomid and room.user_id=users.user_id";
                             $room_result = mysqli_query($mysqli, $sql_room);
                             $row = mysqli_fetch_assoc($room_result);
+                            
+
                         ?>
                         <li class="list-group-item d-flex justify-content-between lh-condensed">
                             <div>
@@ -118,17 +122,43 @@
                             </div>
                             <span class="text-muted">1박 <?=$row['room_price'];?>₩</span>
                         </li>
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div>
+                                <h6 class="my-0">최근 예약현황</h6>
+                                
+                                <ul>
+                                    <?php
+                                        $sql_room_res ="SELECT * FROM reservation WHERE room_id=$roomid ORDER BY res_pay_date DESC LIMIT 30;";
+                                        $room_res_result = mysqli_query($mysqli, $sql_room_res);
+                                        $res_list_count = 0;
+                                            while($res_row = $room_res_result->fetch_array()){
+                                                $res_list_count = $res_list_count + 1;
+                                                ?>
+                                            <li>
+                                                <small class="text-muted"><?=$res_list_count;?> 번 - <?=$res_row['res_start']?> ~ <?=$res_row['res_end'];?></small>
+                                            </li>
+
+                                        <?php
+                                            }
+                                        ?>
+                                </ul>
+                            </div>
+                        </li>
                     </ul>
                 </div>
                 <div class="col-md-8 order-md-1">
                     <h4 class="mb-3">CheckOut</h4>
-                    <form class="needs-validation" id="checkoutform" method="post" active="../php/checkout.php" novalidate="">
+                    <form class="needs-validation" id="checkoutform" method="post" action="../php/checkout_insert.php" novalidate>
                         <input type="hidden" name="roomid" value="<?=$roomid?>">
                         <input type="hidden" name="userid" value="<?=$_SESSION['user_id']?>">
                         <div class="row">
+                            <script>
+                                var today = new Date().toISOString().substring(0, 10);
+                                
+                            </script>
                             <div class="col-md-6 mb-3">
                                 <label for="start_date">입실 날짜</label>
-                                <input type="date" class="form-control" id="start_date" name="start_date" placeholder="" value=""
+                                <input type="date" class="form-control" id="start_date" name="start_date" onchange="get_start_date(this.value)" min="" max=""  placeholder="" value=""
                                     required="">
                                 <div class="invalid-feedback">
                                     Valid first name is required.
@@ -136,7 +166,7 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="end_date">퇴실 날짜</label>
-                                <input type="date" class="form-control" id="end_date" name="end_date" placeholder="" value=""
+                                <input type="date" class="form-control" id="end_date" name="end_date" onchange="get_end_date(this.value)" min="" max="" placeholder="" value=""
                                     required="">
                             </div>
                         </div>
@@ -152,7 +182,8 @@
                         <hr class="mb-4">
                         
                         <div>
-                            <h5 class="mb-3">최종 결제 금액 : <a value="<?//여기 구현!?>"name="res_pay" id="res_pay"></a></h5>
+                            <h5 class="mb-3">최종 결제 금액 : <a name="res_pay_show" id="res_pay_show" value=""></a>원</h5>
+                            <input type="hidden" name="res_pay" id="res_pay" value=""> 
                         </div>
                         
                         <hr class="mb-4">
@@ -175,7 +206,7 @@
                         </div>
 
                         <hr class="mb-4">
-                        <button class="btn btn-primary btn-lg btn-block" type="submit" id="res_btn">예약 결제</button>
+                        <button class="btn btn-primary btn-lg btn-block" type="button" id="res_btn">예약 결제</button>
                     </form>
                 </div>
             </div>
@@ -192,7 +223,70 @@
     <!-- Core theme JS-->
     <script src="../js/scripts.js"></script>
     <script>
-        <!--로그인확인,날짜 중복확인, 종료일이 시작일보다 뒤일경우 확인-->
+        //결제금액 계산
+        var date1;
+        var date1_str; //배열로저장
+        var date1_time; //배열에서 date이용 형 변경
+        var date2;
+        var date2_1;
+        var date2_time;
+
+        var pay_price = 0;
+
+        function get_start_date(getdate){
+            date1 = getdate;
+            date1_str = date1.split("-");
+            date1_time = new Date(date1_str[0],date1_str[1],date1_str[2]).getTime();
+            if(date1 <= today){
+                alert("날짜가 올바르지 않습니다.");
+                document.getElementById("start_date").value = today;
+            } else if(date1 > date2){
+                alert("날짜가 올바르지 않습니다.");
+                document.getElementById("start_date").value = today;
+            }else if(date1 < date2){
+                //end를 바꾸고 start를 다시 바꿀떄 계산처리
+                var count_day = (date2_time-date1_time)/(1000*60*60*24);
+                pay_price = <?=$row['room_price']?>*count_day;
+                document.getElementById("res_pay_show").innerText = pay_price;
+                document.getElementById("res_pay").value = pay_price;                                        
+            } else {                                        
+            }
+        }
+        function get_end_date(getdate){
+            date2= getdate;
+            date2_str = date2.split("-");
+            date2_time = new Date(date2_str[0],date2_str[1],date2_str[2]).getTime();
+
+            if(date2 <= today){
+                alert("날짜가 올바르지 않습니다.");
+                document.getElementById("end_date").value = today;
+            } else if(date2 <= date1) {
+                alert("날짜가 올바르지 않습니다.");
+                document.getElementById("end_date").value = today;
+            } else{                                                                             
+                //날짜 카운트 가격처리
+                var count_day = (date2_time-date1_time)/(1000*60*60*24);
+                pay_price = <?=$row['room_price']?>*count_day;
+                document.getElementById("res_pay_show").innerText = pay_price;
+                document.getElementById("res_pay").value = pay_price;
+            }
+        }  
+        
+        
+        const start_date = document.querySelector("#start_date");
+        const end_date = document.querySelector("#end_date");
+        const res_pay = document.querySelector("#res_pay");
+        res_btn.addEventListener("click", function(e) {
+            if(start_date.value == "" || start_date.value == null || start_date.value == undefined || (start_date.value != null && typeof start_date.value == "object" && !Object.keys(start_date.value).length)){
+                alert("입실 날짜가 입력되지 않았습니다!");
+            } else if(end_date.value == "" || end_date.value == null || end_date.value == undefined || (end_date.value != null && typeof end_date.value == "object" && !Object.keys(end_date.value).length)){
+                alert("퇴실 날짜가 입력되지 않았습니다!");
+            } else if(res_pay.value == "" || res_pay.value == null || res_pay.value == undefined || (res_pay.value != null && typeof res_pay.value == "object" && !Object.keys(res_pay.value).length)){
+                alert("결제금액 오류!");
+            } else{
+                checkoutform.submit();
+            }
+        });
     </script>
 </body>
 
