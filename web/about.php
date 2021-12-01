@@ -41,11 +41,11 @@
                             <li>
                                 <hr class="dropdown-divider" />
                             </li>
-                            <li><a class="dropdown-item" href="room_list.php?roomtpye='#'">팬션</a></li>
-                            <li><a class="dropdown-item" href="#!">호텔</a></li>
-                            <li><a class="dropdown-item" href="#!">모텔</a></li>
-                            <li><a class="dropdown-item" href="#!">풀빌라</a></li>
-                            <li><a class="dropdown-item" href="#!">리조트/콘도</a></li>
+                            <li><a class="dropdown-item" href="room_list.php?type=pension">펜션</a></li>
+                            <li><a class="dropdown-item" href="room_list.php?type=hotel">호텔</a></li>
+                            <li><a class="dropdown-item" href="room_list.php?type=motel">모텔</a></li>
+                            <li><a class="dropdown-item" href="room_list.php?type=poolvilla">풀빌라</a></li>
+                            <li><a class="dropdown-item" href="room_list.php?type=resort">리조트/콘도</a></li>
                         </ul>
                     </li>
                 </ul>

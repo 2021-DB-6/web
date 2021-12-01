@@ -28,6 +28,7 @@ if ($passwordResult === true) {
     print_r($_SESSION);
     //echo $_SESSION['userId'];
     $_SESSION['usergroups'] = $row['user_groups'];
+    $_SESSION['user_id'] = $row['user_id'];
 
 ?>
     <script>

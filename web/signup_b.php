@@ -48,26 +48,59 @@
                             <li>
                                 <hr class="dropdown-divider" />
                             </li>
-                            <li><a class="dropdown-item" href="room_view.php?roomtpye='#'">팬션</a></li>
-                            <li><a class="dropdown-item" href="#!">호텔</a></li>
-                            <li><a class="dropdown-item" href="#!">모텔</a></li>
-                            <li><a class="dropdown-item" href="#!">풀빌라</a></li>
-                            <li><a class="dropdown-item" href="#!">리조트/콘도</a></li>
+                            <li><a class="dropdown-item" href="room_list.php?type=pension">펜션</a></li>
+                            <li><a class="dropdown-item" href="room_list.php?type=hotel">호텔</a></li>
+                            <li><a class="dropdown-item" href="room_list.php?type=motel">모텔</a></li>
+                            <li><a class="dropdown-item" href="room_list.php?type=poolvilla">풀빌라</a></li>
+                            <li><a class="dropdown-item" href="room_list.php?type=resort">리조트/콘도</a></li>
                         </ul>
                     </li>
                 </ul>
-                <form class="d-flex">
-                    <button class="btn btn-outline-dark" type="submit">
-                        <i class="bi-cart-fill me-1"></i>
-                        Cart
-                        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                    </button>
-                </form>
                 <form class="d-flex ms-1">
-                    <button class="btn btn-outline-dark" type="button" onclick="location.href='signup.php'">
-                    <i class="bi bi-box-arrow-in-right me-1"></i>
-                    LOGIN
-                    </button>
+                    <?php
+                    session_start(); //세션
+                    if ($_SESSION['userId'] == null) { //로그인전
+                    ?>
+                        <button class="btn btn-outline-dark" type="button" onclick="location.href='login.php'">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>
+                            LOGIN
+                        </button>
+                        <?php
+                    } else {  //로그인후
+                        if ($_SESSION['usergroups'] == 'user') { //일반유저일떄
+                        ?>
+                            <button class="btn btn-outline-dark ms-2" type="button" onclick="location.href='web/mypage.php'">
+                                <?php echo $_SESSION['userId'] ?>&nbsp;님
+                            </button>
+                            <button class="btn btn-outline-dark ms-1" type="button" onclick="location.href='php/logout.php'">
+                                <i class="bi bi-box-arrow-in-right me-1"></i>
+                                LOGOUT
+                            </button>
+                        <?php
+                        } else if ($_SESSION['usergroups'] == 'business') { //비지니스회원일떄
+                        ?>
+                            <button class="btn btn-outline-dark ms-2" type="button" onclick="location.href='web/business.php'">
+                                <?php echo $_SESSION['userId'] ?>&nbsp;님
+                            </button>
+
+                            <button class="btn btn-outline-dark ms-1" type="button" onclick="location.href='php/logout.php'">
+                                <i class="bi bi-box-arrow-in-right me-1"></i>
+                                LOGOUT
+                            </button>
+                        <?php
+                        } else { //관리자일때
+                        ?>
+                            <button class="btn btn-outline-dark ms-2" type="button" onclick="location.href='web/admin.php'">
+                                <?php echo $_SESSION['userId'] ?>&nbsp;님
+                            </button>
+                            <button class="btn btn-outline-dark ms-1" type="button" onclick="location.href='php/logout.php'">
+                                <i class="bi bi-box-arrow-in-right me-1"></i>
+                                LOGOUT
+                            </button>
+                    <?php
+                        }
+                    }
+                    ?>
                 </form>
             </div>
         </div>

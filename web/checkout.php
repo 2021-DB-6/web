@@ -104,22 +104,31 @@
                         <span class="text-muted">선택한 숙소</span>
                     </h4>
                     <ul class="list-group mb-3">
+                        <?php 
+                            include '../DB/db.php';
+                            $roomid = $_GET['room_id'];
+                            $sql_room = "SELECT room.*, users.user_name FROM room, users WHERE room.room_id=$roomid and room.user_id=users.user_id";
+                            $room_result = mysqli_query($mysqli, $sql_room);
+                            $row = mysqli_fetch_assoc($room_result);
+                        ?>
                         <li class="list-group-item d-flex justify-content-between lh-condensed">
                             <div>
-                                <h6 class="my-0">Product name</h6>
-                                <small class="text-muted">Brief description</small>
+                                <h6 class="my-0"><?=$row['room_name'];?></h6>
+                                <small class="text-muted"><?=$row['user_name']?></small>
                             </div>
-                            <span class="text-muted">$12</span>
+                            <span class="text-muted">1박 <?=$row['room_price'];?>₩</span>
                         </li>
                     </ul>
                 </div>
                 <div class="col-md-8 order-md-1">
                     <h4 class="mb-3">CheckOut</h4>
-                    <form class="needs-validation" novalidate="">
+                    <form class="needs-validation" id="checkoutform" method="post" active="../php/checkout.php" novalidate="">
+                        <input type="hidden" name="roomid" value="<?=$roomid?>">
+                        <input type="hidden" name="userid" value="<?=$_SESSION['user_id']?>">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="start_date">입실 날짜</label>
-                                <input type="date" class="form-control" id="start_date" placeholder="" value=""
+                                <input type="date" class="form-control" id="start_date" name="start_date" placeholder="" value=""
                                     required="">
                                 <div class="invalid-feedback">
                                     Valid first name is required.
@@ -127,19 +136,25 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="end_date">퇴실 날짜</label>
-                                <input type="date" class="form-control" id="end_date" placeholder="" value=""
+                                <input type="date" class="form-control" id="end_date" name="end_date" placeholder="" value=""
                                     required="">
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label for="email">결제내용 수신 이메일 <span class="text-muted">(Optional)</span></label>
-                            <input type="email" class="form-control" id="email" placeholder="you@example.com">
+                            <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com">
                             <div class="invalid-feedback">
                                 Please enter a valid email address for shipping updates.
                             </div>
                         </div>
 
+                        <hr class="mb-4">
+                        
+                        <div>
+                            <h5 class="mb-3">최종 결제 금액 : <a value="<?//여기 구현!?>"name="res_pay" id="res_pay"></a></h5>
+                        </div>
+                        
                         <hr class="mb-4">
 
                         <h4 class="mb-3">결제 수단</h4>
@@ -160,7 +175,7 @@
                         </div>
 
                         <hr class="mb-4">
-                        <button class="btn btn-primary btn-lg btn-block" type="submit">예약 결제</button>
+                        <button class="btn btn-primary btn-lg btn-block" type="submit" id="res_btn">예약 결제</button>
                     </form>
                 </div>
             </div>
@@ -176,6 +191,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="../js/scripts.js"></script>
+    <script>
+        <!--로그인확인,날짜 중복확인, 종료일이 시작일보다 뒤일경우 확인-->
+    </script>
 </body>
 
 </html>

@@ -100,8 +100,11 @@
                     include '../DB/db.php';
                     #여기서 회원정보 출력시키고 회원탈퇴도 가능하게 하기   
                ?>
-               <div>
+               <div class="">
                    <!--회원정보-->
+                   <div class="">
+                       <?=$_SESSION['userId'];?> 님 반가워요!
+                   </div>
                </div>
                <div>
                    <!--결제 내역 정보-->
