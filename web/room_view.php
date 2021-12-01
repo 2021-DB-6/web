@@ -150,10 +150,6 @@
                         <p class="lead">
                             <?= $row['room_name'] ?>
                         </p>
-                        <div>
-                            <!--여기에 달력넣어서 예약현황 표시-->
-                            
-                        </div>
                         <div class="d-flex">
                             <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem">
                             <button class="btn btn-outline-dark flex-shrink-0" type="button" onclick="location.href='checkout.php?room_id=<?= $roomid; ?>'">

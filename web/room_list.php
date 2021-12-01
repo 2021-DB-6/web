@@ -139,8 +139,6 @@
                     $sql2= "SELECT * FROM room WHERE room_type = COALESCE($type, room_type) ORDER BY room_id DESC LIMIT $page_start, $list;";
                     $list_result = mysqli_query($mysqli, $sql2);
                     while($roomlist = $list_result->fetch_array()){
-                        $room_name = $roomlist['room_name'];
-                        $room_price = $roomlist['room_price'];
                         ?>
                         <div class="col mb-5">
                             <div class="card h-100">
