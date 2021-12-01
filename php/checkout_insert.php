@@ -19,7 +19,7 @@
     $result = mysqli_query($mysqli, $sql_checkout_insert);
     
     if ($result === false) {
-        echo "예약에 문제가 생겼습니다. 관리자에게 문의해주세요.";
+        echo "예약에 문제가 생겼습니다. 관리자에게 문의해주세요. ERROR : ";
         echo mysqli_error($mysqli);
     } else {
 ?>
