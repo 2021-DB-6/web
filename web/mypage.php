@@ -7,28 +7,11 @@
     //회원 정보
     $sql_res_count = "SELECT COUNT(*) AS cnt FROM reservation WHERE user_id=".$_SESSION['user_id'].";";
     $res_count = mysqli_query($mysqli, $sql_res_count);
-    $res_count_rows = mysqli_fetch_array($res_count);
-
-    //회원 비밀번호 번경
-    
-
-    //회원 탈퇴
-    //탈퇴시 예약기록의 user_id를 0으로 바꾸고 해당 유저 칼럼 삭제 실행
-
+    $res_count_rows = mysqli_fetch_array($res_count);  
 
     //회원 예약 목록
-    $sql_user_res = "SELECT * FROM reservation WHERE user_id=".$_SESSION['userId']." ORDER BY res_pay_date DESC LIMIT 10;";
-    $res_list = mysqli_query($mysqli, $sql_user_res);
-    $reslist10_rows = mysqli_fetch_array($res_list);
-
-
-    //예약 수정,취소(칼럼삭제)
-    function res_update(){
-        
-    }
-    $sql_user_res_update ="UPDATE FROM reservation WHERE res_id =".$d_res.";";
-    $sql_user_res_d ="DELETE FROM reservation WHERE res_id =".$d_res.";";
-    $res_d = mysqli_query($res_d);
+    $sql_user_res = "SELECT reservation.*, room.room_name FROM reservation,room WHERE reservation.user_id=".$_SESSION['user_id']." AND room.room_id=reservation.room_id ORDER BY res_pay_date DESC LIMIT 20;";
+    $res_list = mysqli_query($mysqli, $sql_user_res); 
 ?>
 
 
@@ -198,7 +181,7 @@
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                                    <button type="button" class="btn btn-danger" id="">서비스 탈퇴</button>
+                                    <button type="button" class="btn btn-danger" onclick="location.href='../php/user_delete.php';">서비스 탈퇴</button>
                                   </div>
                                 </div>
                               </div>
@@ -210,17 +193,72 @@
                    <div class="h-100 p-3 bg-light rounded-3">
                        <h4>예약현황</h4>
                        <!--결제 내역 정보(수정, 취소(삭제))-->
-                       
-                       <ul class="list-group">
-                        <?php
-                            
-                            
-                        ?>
-                               <li class="list-group-item"> ㅇㅇ</li>
-                           <?php
-
-                       ?>
-                       </ul>
+                       <table class="table">
+                           <thead>
+                               <tr>
+                                    <th>#</th>
+                                    <th>숙소이름</th>
+                                    <th>결제일</th>
+                                    <th>예약시작일</th>
+                                    <th>예약종료일</th>
+                                    <th>결제가격</th>                             
+                                    <th>변경</th>
+                                </tr>
+                           </thead>
+                           <tbody>
+                               <?php
+                                $list_i=0;
+                                while($res_list_row = $res_list->fetch_array()){ 
+                                    $list_i = $list_i + 1;
+                                ?>
+                                <tr>
+                                    <th scope="row"><?=$list_i?></th>
+                                    <td><a href="room_view.php?room_id=<?=$res_list_row['room_id']?>"><?=$res_list_row['room_name']?></a></td>
+                                    <td><?=$res_list_row['res_pay_date']?></td>
+                                    <td><?=$res_list_row['res_start']?></td>
+                                    <td><?=$res_list_row['res_end']?></td>
+                                    <td><?=$res_list_row['res_pay']?></td>
+                                    <td><button type="button" class="btn btn-light btn-outline-dark" id="res_update_<?=$list_i?>btn" data-bs-toggle="modal" data-bs-target="#res_update_modal<?=$list_i?>">예약 변경</button></td>
+                                    <!--예약 모달-->
+                                    <div class="modal fade" id="res_update_modal<?=$list_i?>" tabindex="-1" aria-labelledby="res_update_modal<?=$list_i?>_Label" aria-hidden="true">
+                                      <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <h5 class="modal-title" id="res_update_modal<?=$list_i?>_Label">예약 변경</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                          </div>
+                                          <div class="modal-body">
+                                            <p>예약변경</p>
+                                            <hr>
+                                            <form id="res_update_form_<?=$list_i?>" method="post" action="../php/res_update.php">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="update_start_date<?=$list_i?>">변경 입실 날짜</label>
+                                                    <input type="date" class="form-control" id="update_start_date<?=$list_i?>" name="update_start_date<?=$list_i?>" onchange="get_start_date(this.value)" min="" max=""  placeholder="" value="" required="">
+                                                    <div class="invalid-feedback">
+                                                        Valid first name is required.
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="update_end_date<?=$list_i?>">변경 퇴실 날짜</label>
+                                                    <input type="date" class="form-control" id="update_end_date<?=$list_i?>" name="update_end_date<?=$list_i?>" onchange="get_end_date(this.value)" min="" max="" placeholder="" value=""
+                                    required="">
+                                                </div>
+                                              </form>                                            
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                            <button type="button" class="btn btn-primary" onclick="location.href='../php/res_update.php';">예약변경</button>
+                                            <button type="button" class="btn btn-danger" onclick="location.href='../php/res_delete.php?res_id=<?=$res_list_row['res_id']?>';">예약취소</button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </tr>
+                                   <?php
+                                    }
+                               ?>
+                           </tbody>
+                       </table>
                    </div>
                </div>
             </div>              
@@ -234,6 +272,8 @@
         <!-- Core theme JS-->
         <script src="../js/scripts.js"></script>
         <script>
+            var today = new Date().toISOString().substring(0, 10);
+
             const passwd_update_form = document.querySelector("#passwd_update-form");
             const passwd_btn = document.querySelector("#passwd_btn");
             const old_password = document.querySelector("#old_password");
@@ -247,6 +287,9 @@
                     alert("비밀번호가 서로 일치하지 않습니다");
                 }
             });
+            
+            //예약가능일 검사(예약시작일이 오늘이후)
+            
         </script>
     </body>
 </html>
