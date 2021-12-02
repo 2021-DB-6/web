@@ -109,6 +109,19 @@
                         
                             include '../DB/db.php';
                             $roomid = $_GET['room_id'];
+                            $timestamp = strtotime("+1 days");
+                            $timestamp2 = strtotime("+2 days");
+                            if(isset($_GET['u_start_date'])){
+                                $u_start_date =$_GET['u_start_date'];
+                            } else {
+                                $u_start_date = date("Y-m-d", $timestamp);
+                            }
+                            if(isset($_GET['u_end_date'])){
+                                $u_end_date =$_GET['u_end_date'];
+                            } else {
+                                $u_end_date = date("Y-m-d", $timestamp2);
+                            }
+                        
                             $sql_room = "SELECT room.*, users.user_name FROM room, users WHERE room.room_id=$roomid and room.user_id=users.user_id";
                             $room_result = mysqli_query($mysqli, $sql_room);
                             $row = mysqli_fetch_assoc($room_result);
@@ -158,15 +171,14 @@
                             </script>
                             <div class="col-md-6 mb-3">
                                 <label for="start_date">입실 날짜</label>
-                                <input type="date" class="form-control" id="start_date" name="start_date" onchange="get_start_date(this.value)" min="" max=""  placeholder="" value=""
-                                    required="">
+                                <input type="date" class="form-control" id="start_date" name="start_date" onchange="get_start_date(this.value)" min="" max=""  placeholder="" value="<?=$u_start_date?>" required="">
                                 <div class="invalid-feedback">
                                     Valid first name is required.
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="end_date">퇴실 날짜</label>
-                                <input type="date" class="form-control" id="end_date" name="end_date" onchange="get_end_date(this.value)" min="" max="" placeholder="" value=""
+                                <input type="date" class="form-control" id="end_date" name="end_date" onchange="get_end_date(this.value)" min="" max="" placeholder="" value="<?=$u_end_date?>"
                                     required="">
                             </div>
                         </div>
@@ -287,6 +299,8 @@
                 checkoutform.submit();
             }
         });
+        get_start_date("<?=$u_start_date?>");
+        get_end_date("<?=$u_end_date?>");
     </script>
 </body>
 

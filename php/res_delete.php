@@ -6,8 +6,8 @@
 
 
 	$res_d_sql ="DELETE FROM reservation WHERE res_id=".$d_res_id." AND user_id = ".$_SESSION['user_id'].";";
-    $user_d = mysqli_query($mysqli ,$res_d_sql);
-    if($user_d === true){
+    $res_d = mysqli_query($mysqli ,$res_d_sql);
+    if($res_d === true){
     ?>
         <script>
             alert("예약 취소 되었습니다!")
