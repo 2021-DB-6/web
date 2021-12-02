@@ -55,35 +55,43 @@
                         <i class="bi bi-box-arrow-in-right me-1"></i>
                         LOGIN
                     </button>
+                    <script> //접근차단
+                        alert("로그인이 필요합니다!");
+                        location.href="login.php";
+                    </script>
                     <?php
                             } else {  //로그인후
                                 if($_SESSION['usergroups']=='user'){ //일반유저일떄
                     ?>
-                    <button class="btn btn-outline-dark ms-2" type="button" onclick="location.href='web/mypage.php'">
+                    <button class="btn btn-outline-dark ms-2" type="button" onclick="location.href='mypage.php'">
                         <?php echo $_SESSION['userId'] ?>&nbsp;님
                     </button>
-                    <button class="btn btn-outline-dark ms-1" type="button" onclick="location.href='php/logout.php'">
+                    <button class="btn btn-outline-dark ms-1" type="button" onclick="location.href='../php/logout.php'">
                         <i class="bi bi-box-arrow-in-right me-1"></i>
                         LOGOUT
                     </button>
+                    <script> //접근차단
+                        alert("잘못된접근입니다.");
+                        history.back();
+                    </script>
                     <?php            
                                 }else if($_SESSION['usergroups']=='business'){ //비지니스회원일떄
                                 ?>
-                    <button class="btn btn-outline-dark ms-2" type="button" onclick="location.href='web/business.php'">
+                    <button class="btn btn-outline-dark ms-2" type="button" onclick="location.href='business.php'">
                         <?php echo $_SESSION['userId'] ?>&nbsp;님
                     </button>
 
-                    <button class="btn btn-outline-dark ms-1" type="button" onclick="location.href='php/logout.php'">
+                    <button class="btn btn-outline-dark ms-1" type="button" onclick="location.href='../php/logout.php'">
                         <i class="bi bi-box-arrow-in-right me-1"></i>
                         LOGOUT
                     </button>
                     <?php
                                 }else { //관리자일때
                                 ?>
-                    <button class="btn btn-outline-dark ms-2" type="button" onclick="location.href='web/admin.php'">
+                    <button class="btn btn-outline-dark ms-2" type="button" onclick="location.href='admin.php'">
                         <?php echo $_SESSION['userId'] ?>&nbsp;님
                     </button>
-                    <button class="btn btn-outline-dark ms-1" type="button" onclick="location.href='php/logout.php'">
+                    <button class="btn btn-outline-dark ms-1" type="button" onclick="location.href='../php/logout.php'">
                         <i class="bi bi-box-arrow-in-right me-1"></i>
                         LOGOUT
                     </button>
@@ -103,7 +111,7 @@
                     <div class="sidebar-sticky">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link active" href="#">
+                                <a class="nav-link active" href="business.php">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                         stroke-linejoin="round" class="feather feather-home">
@@ -114,7 +122,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="business.php?p=res&num=1">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                         stroke-linejoin="round" class="feather feather-file">
@@ -125,7 +133,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="business.php?p=room&num=1">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                         stroke-linejoin="round" class="feather feather-shopping-cart">
@@ -138,7 +146,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="business.php?p=customer&num=1">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                         stroke-linejoin="round" class="feather feather-users">
@@ -153,7 +161,7 @@
                         </ul>
                     </div>
                 </nav>
-
+                
                 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
                     <div class="chartjs-size-monitor"
                         style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
