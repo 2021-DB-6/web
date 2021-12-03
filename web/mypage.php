@@ -237,7 +237,7 @@ $res_list = mysqli_query($mysqli, $sql_user_res);
                                                             <label for="update_start_date<?= $list_i ?>">변경 입실 날짜</label>
                                                             <input type="date" class="form-control" id="update_start_date<?= $list_i ?>" name="update_start_date<?= $list_i ?>" onchange="get_start_date(this.value)" placeholder="" value="<?=$res_list_row['res_start'];?>" required="">
                                                             <div class="invalid-feedback">
-                                                                Valid first name is required.
+                                                                Valid first name is required.ㅜ
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6 mb-3">

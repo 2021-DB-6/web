@@ -19,8 +19,12 @@ if ($passwordResult === true) {
     //로그인 성공, 세션에 id 저장
     session_start();
     $_SESSION['userId'] = $row['user_email'];
+    $_SESSION['user_name'] = $row['user_name'];
     $_SESSION['usergroups'] = $row['user_groups'];
     $_SESSION['user_id'] = $row['user_id'];
+    if(isset($row['user_business_num'])){
+        $_SESSION['user_business_num'] = $row['user_business_num'];
+    }
 
 ?>
     <script>

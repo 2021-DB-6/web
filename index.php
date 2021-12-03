@@ -105,7 +105,7 @@
                     <?php
                       include 'DB/db.php';              
                     //게시글 가져오기    
-                    $sql2= "SELECT * FROM room ORDER BY room_id DESC LIMIT 12;";
+                    $sql2= "SELECT * FROM room ORDER BY rand() LIMIT 12;";
                     $list_result = mysqli_query($mysqli, $sql2);
                     while($roomlist = $list_result->fetch_array()){
                         $room_name = $roomlist['room_name'];

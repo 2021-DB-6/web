@@ -163,6 +163,10 @@
                 <hr>
                 <br>
                 <div>
+                    <div class="p-5 mb-4 bg-light border rounded-3">
+                        <pre style="white-space: pre-wrap;"><?=$row['room_text'] ?></pre>
+                    </div>
+                    <br>
                     <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-indicators">
                             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
