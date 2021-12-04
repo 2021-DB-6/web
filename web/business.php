@@ -594,7 +594,7 @@ $main_res_user_cnt = mysqli_num_rows(mysqli_query($mysqli, $main_res_user_cnt_sq
 
                     <?php
                     } else if ($view === "room") {
-                        //------------------------------------------------------------
+                        //--------------------------------------------------------------------
                         //지사가 등록한 상품을 리스트로 표시 및 상품별 예약 건수 + 상품등록 제작
                     ?>
                         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -650,18 +650,19 @@ $main_res_user_cnt = mysqli_num_rows(mysqli_query($mysqli, $main_res_user_cnt_sq
                                             <td><?= $room_page_list['room_type'] ?></td>
                                             <td><?= $room_page_list['room_price'] ?></td>
                                             <td>
-                                                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#room_update_modal" onclick="room_upate_btn(<?= $room_page_list['room_id'] ?>, '<?= $room_page_list['res_start'] ?>' , '<?= $room_page_list['res_end'] ?>', '<?=$room_page_list['room_price'] ?>')">수정</button>
+                                                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#room_update_modal" onclick="room_upate_btn(<?= $room_page_list['room_id'] ?>, `<?= $room_page_list['room_name'] ?>`, `<?= $room_page_list['room_text'] ?>`, `<?= $room_page_list['room_info'] ?>`, '<?= $room_page_list['room_type'] ?>', <?= $room_page_list['room_price'] ?>)">수정</button>
                                                 <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#room_delete_modal" onclick="room_delete_modal(<?= $room_page_list['room_id'] ?>)">삭제</button>
                                             </td>
                                         </tr>
                                     <?php
                                     }
+                                    
                                     ?>
                                     
                                     
                                     <!--상품 수정 모달-->
                                     <div class="modal fade" id="room_update_modal" tabindex="-1" aria-labelledby="room_update_modal_Label" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="room_update_modal_Label">상품 수정</h5>
@@ -669,20 +670,85 @@ $main_res_user_cnt = mysqli_num_rows(mysqli_query($mysqli, $main_res_user_cnt_sq
                                                 </div>
                                                 <div class="modal-body">
                                                     상품 번호 : <span id="update_modal_room_id"></span> 번
-                                                    <div class="col mb-3">
-                                                        <label for="name">이름</label>
-                                                        <input type="text" class="form-control" name="name" id="name" placeholder="" value="" required />
-                                                        <div class="invalid-feedback">이름을 입력해주세요.</div>
-                                                    </div>
-
-                                                    <br>
-                                                    <form id="res_update_form" method="post" action="../php/room_update.php">
-                                                        
+                                                    <hr>
+                                                    <form id="room_update_form" method="post" action="../php/room_update.php">
+                                                        <input type="hidden" id="u_room_id" name="u_room_id">
+                                                        <div class="col mb-3">
+                                                            <label for="update_room_name">상품(방)이름</label>
+                                                            <input type="text" class="form-control" name="update_room_name" id="update_room_name" placeholder="" value="" required />
+                                                            <div class="invalid-feedback">이름을 입력해주세요.</div>
+                                                        </div>
+                                                        <div class="col mb-3">
+                                                            <label for="update_room_text">설명</label>
+                                                            <textarea class="form-control" name="update_room_text" id="update_room_text" placeholder="" value="" required style="height: 200px"></textarea>
+                                                            <div class="invalid-feedback">상품 설명을 입력해주세요.</div>
+                                                        </div>
+                                                        <div class="col mb-3">
+                                                            <label for="update_room_info">편의사항</label>
+                                                            <input type="text" class="form-control" name="update_room_info" id="update_room_info" placeholder="" value="" required />
+                                                            <div class="invalid-feedback">이름을 입력해주세요.</div>
+                                                        </div>
+                                                        <div class="col mb-3">
+                                                            <label for="update_room_type">타입</label>
+                                                            <select class="form-select" aria-label="Floating label select example" name="update_room_type" id="update_room_type"  value="">
+                                                                <option selected>숙소 타입(업종)선택</option>
+                                                                <option value="pension">펜션</option>
+                                                                <option value="hotel">호텔</option>
+                                                                <option value="motel">모텔</option>
+                                                                <option value="poolvilla">풀빌라</option>
+                                                                <option value="resort">리조트</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col mb-3">
+                                                            <label for="update_room_price">가격</label>
+                                                            <input type="num" class="form-control" name="update_room_price" id="update_room_price" placeholder="" value="" required />
+                                                            <div class="invalid-feedback">이름을 입력해주세요.</div>
+                                                        </div>
+                                                        <div class="col mb-3">
+                                                            <label for="update_room_img1">메인 이미지</label>
+                                                            <div class="col">
+                                                                <img class="img-thumbnail mx-auto" id="update_room_img1">
+                                                                <input type="file" accept="image/jpeg, image/jpg, image/png" class="form-control" name="update_room_img1_file" id="update_room_img1_file" placeholder="" value="" required />
+                                                                <input type="hidden" name="update_room_img1_base64" id="update_room_img1_base64">
+                                                            </div>                                                            
+                                                        </div>
+                                                        <div class="col mb-3">
+                                                            <label for="update_room_img2">이미지-2</label>
+                                                            <div class="col">
+                                                                <img class="img-thumbnail mx-auto" id="update_room_img2">
+                                                                <input type="file" accept="image/jpeg, image/jpg, image/png" class="form-control" name="update_room_img2_file" id="update_room_img2_file" placeholder="" value="" required />
+                                                                <input type="hidden" name="update_room_img2_base64" id="update_room_img2_base64">
+                                                            </div>                                                           
+                                                        </div>
+                                                        <div class="col mb-3">
+                                                            <label for="update_room_img3">이미지-3</label>
+                                                            <div class="col">
+                                                                <img class="img-thumbnail mx-auto" id="update_room_img3">
+                                                                <input type="file" accept="image/jpeg, image/jpg, image/png" class="form-control" name="update_room_img3_file" id="update_room_img3_file" placeholder="" value="" required />
+                                                                <input type="hidden" name="update_room_img3_base64" id="update_room_img3_base64">
+                                                            </div>                                                         
+                                                        </div>
+                                                        <div class="col mb-3">
+                                                            <label for="update_room_img4">이미지-4</label>
+                                                            <div class="col">
+                                                                <img class="img-thumbnail mx-auto" id="update_room_img4">
+                                                                <input type="file" accept="image/jpeg, image/jpg, image/png" class="form-control" name="update_room_img4_file" id="update_room_img4_file" placeholder="" value="" required />
+                                                                <input type="hidden" name="update_room_img4_base64" id="update_room_img4_base64">
+                                                            </div>                                                        
+                                                        </div>
+                                                        <div class="col mb-3">
+                                                            <label for="update_room_img5">이미지-5</label>
+                                                            <div class="col">
+                                                                <img class="img-thumbnail mx-auto" id="update_room_img5">
+                                                                <input type="file" accept="image/jpeg, image/jpg, image/png" class="form-control" name="update_room_img5_file" id="update_room_img5_file" placeholder="" value="" required />
+                                                                <input type="hidden" name="update_room_img5_base64" id="update_room_img5_base64">
+                                                            </div>                                                         
+                                                        </div>
                                                     </form> 
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                                                    <button type="button" class="btn btn-primary" id="room_update_btn" onclick="">예약 변경</button>
+                                                    <button type="button" class="btn btn-primary" id="room_update_btn" onclick="">상품 변경</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -709,16 +775,86 @@ $main_res_user_cnt = mysqli_num_rows(mysqli_query($mysqli, $main_res_user_cnt_sq
                                     </div>
                                     <!--상품 등록 모달-->
                                     <div class="modal fade" id="room_insert_modal" tabindex="-1" aria-labelledby="room_insert_modal_Label" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="room_insert_modal_Label">상품 등록</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
-                                                <div class="modal-body">
-                                                   <form>
-                                                       
-                                                    </form>                                                 
+                                                <div class="modal-body">                                                   
+                                                    <form id="room_insert_form" method="post" action="../php/room_insert.php">
+                                                        <div class="col mb-3">
+                                                            <label for="insert_room_name">상품(방)이름</label>
+                                                            <input type="text" class="form-control" name="insert_room_name" id="insert_room_name" placeholder="" value="" required />
+                                                            <div class="invalid-feedback">이름을 입력해주세요.</div>
+                                                        </div>
+                                                        <div class="col mb-3">
+                                                            <label for="insert_room_text">설명</label>
+                                                            <textarea class="form-control" name="insert_room_text" id="insert_room_text" placeholder="" value="" required style="height: 200px"></textarea>
+                                                            <div class="invalid-feedback">상품 설명을 입력해주세요.</div>
+                                                        </div>
+                                                        <div class="col mb-3">
+                                                            <label for="insert_room_info">편의사항</label>
+                                                            <input type="text" class="form-control" name="insert_room_info" id="insert_room_info" placeholder="" value="" required />
+                                                            <div class="invalid-feedback">이름을 입력해주세요.</div>
+                                                        </div>
+                                                        <div class="col mb-3">
+                                                            <label for="insert_room_type">타입</label>
+                                                            <select class="form-select" aria-label="Floating label select example" name="insert_room_type" id="insert_room_type"  value="">
+                                                                <option selected>숙소 타입(업종)선택</option>
+                                                                <option value="pension">펜션</option>
+                                                                <option value="hotel">호텔</option>
+                                                                <option value="motel">모텔</option>
+                                                                <option value="poolvilla">풀빌라</option>
+                                                                <option value="resort">리조트</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col mb-3">
+                                                            <label for="insert_room_price">가격</label>
+                                                            <input type="num" class="form-control" name="insert_room_price" id="insert_room_price" placeholder="" value="" required />
+                                                            <div class="invalid-feedback">이름을 입력해주세요.</div>
+                                                        </div>
+                                                        <div class="col mb-3">
+                                                            <label for="insert_room_img1">메인 이미지</label>
+                                                            <div class="col">
+                                                                <img class="img-thumbnail mx-auto" id="insert_room_img1">
+                                                                <input type="file" accept="image/jpeg, image/jpg, image/png" class="form-control" name="insert_room_img1_file" id="insert_room_img1_file" placeholder="" value="" required />
+                                                                <input type="hidden" name="insert_room_img1_base64" id="insert_room_img1_base64">
+                                                            </div>                                                            
+                                                        </div>
+                                                        <div class="col mb-3">
+                                                            <label for="insert_room_img2">이미지-2</label>
+                                                            <div class="col">
+                                                                <img class="img-thumbnail mx-auto" id="insert_room_img2">
+                                                                <input type="file" accept="image/jpeg, image/jpg, image/png" class="form-control" name="insert_room_img2_file" id="insert_room_img2_file" placeholder="" value="" required />
+                                                                <input type="hidden" name="insert_room_img2_base64" id="insert_room_img2_base64">
+                                                            </div>                                                           
+                                                        </div>
+                                                        <div class="col mb-3">
+                                                            <label for="insert_room_img3">이미지-3</label>
+                                                            <div class="col">
+                                                                <img class="img-thumbnail mx-auto" id="insert_room_img3">
+                                                                <input type="file" accept="image/jpeg, image/jpg, image/png" class="form-control" name="insert_room_img3_file" id="insert_room_img3_file" placeholder="" value="" required />
+                                                                <input type="hidden" name="insert_room_img3_base64" id="insert_room_img3_base64">
+                                                            </div>                                                         
+                                                        </div>
+                                                        <div class="col mb-3">
+                                                            <label for="insert_room_img4">이미지-4</label>
+                                                            <div class="col">
+                                                                <img class="img-thumbnail mx-auto" id="insert_room_img4">
+                                                                <input type="file" accept="image/jpeg, image/jpg, image/png" class="form-control" name="insert_room_img4_file" id="insert_room_img4_file" placeholder="" value="" required />
+                                                                <input type="hidden" name="insert_room_img4_base64" id="insert_room_img4_base64">
+                                                            </div>                                                        
+                                                        </div>
+                                                        <div class="col mb-3">
+                                                            <label for="insert_room_img5">이미지-5</label>
+                                                            <div class="col">
+                                                                <img class="img-thumbnail mx-auto" id="insert_room_img5">
+                                                                <input type="file" accept="image/jpeg, image/jpg, image/png" class="form-control" name="insert_room_img5_file" id="insert_room_img5_file" placeholder="" value="" required />
+                                                                <input type="hidden" name="insert_room_img5_base64" id="insert_room_img5_base64">
+                                                            </div>                                                         
+                                                        </div>
+                                                    </form> 
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
@@ -734,17 +870,97 @@ $main_res_user_cnt = mysqli_num_rows(mysqli_query($mysqli, $main_res_user_cnt_sq
                                             var room_id = get_room_id;
                                             var room_name =get_room_name;
                                             var room_text = get_room_text;
-                                            var room_info = get_room_info;
+                                            var room_info = get_room_info;                                            
                                             var room_type = get_room_type;
-                                            var room_price = get_room_price;
+                                            var room_price = get_room_price;                                            
+                                            var room_url = "../php/room_select.php?room_id="+room_id;                                        
+                                            //여기서 get메소드로 select.php를 호출해서 가져온값을 가공해서 넘겨주자!
+                                            fetch(room_url)
+                                                .then((res) => res.json())
+                                                .then(res => {
+                                                    var room_img1 = res.result[0].room_img1;  
+                                                    var room_img2 = res.result[0].room_img2;   
+                                                    var room_img3 = res.result[0].room_img3;   
+                                                    var room_img4 = res.result[0].room_img4;   
+                                                    var room_img5 = res.result[0].room_img5;   
+   
+                                                    //DB에저장된 이미지 삽입
+                                                    if( room_img1 == ""){
+                                                        document.getElementById("update_room_img1").src = "../src/img/album_noimg.jpg";
+                                                    }else{
+                                                        document.getElementById("update_room_img1").src = "data:image/bmp;base64,"+room_img1;
+                                                    }
+                                                    if( room_img2 == ""){
+                                                        document.getElementById("update_room_img2").src = "../src/img/album_noimg.jpg";
+                                                    }else{
+                                                        document.getElementById("update_room_img2").src = "data:image/bmp;base64,"+room_img2;
+                                                    }if( room_img3 == ""){
+                                                        document.getElementById("update_room_img3").src = "../src/img/album_noimg.jpg";
+                                                    }else{
+                                                        document.getElementById("update_room_img3").src = "data:image/bmp;base64,"+room_img3;
+                                                    }if( room_img4 == ""){
+                                                        document.getElementById("update_room_img4").src = "../src/img/album_noimg.jpg";
+                                                    }else{
+                                                        document.getElementById("update_room_img4").src = "data:image/bmp;base64,"+room_img4;
+                                                    }if( room_img5 == ""){
+                                                        document.getElementById("update_room_img5").src = "../src/img/album_noimg.jpg";
+                                                    }else{
+                                                        document.getElementById("update_room_img5").src = "data:image/bmp;base64,"+room_img5;
+                                                    }                                                
+                                            });                                                                                                           
                                             //수정모달 데이터 수정
-                                            document.getElementById("update_room_id").innerText = room_id;
+                                            document.getElementById("update_modal_room_id").innerText = room_id;
+                                            document.getElementById("u_room_id").value = room_id;
                                             document.getElementById("update_room_name").value = room_name;
                                             document.getElementById("update_room_text").value = room_text;
                                             document.getElementById("update_room_info").value = room_info;
                                             document.getElementById("update_room_type").value = room_type;
-                                            document.getElementById("update_room_price").value = room_price;                                            
+                                            document.getElementById("update_room_price").value = room_price;
+                                        }                                        
+                                        //이미지 미리보기
+                                        function readImage(input,img_num) {
+                                            // 인풋 태그에 파일이 있는 경우
+                                            if(input.files && input.files[0]) {
+                                                // 이미지 파일인지 검사 (생략)
+                                                // FileReader 인스턴스 생성
+                                                const reader = new FileReader()
+                                                // 이미지가 로드가 된 경우
+                                                reader.onload = e => {
+                                                    const previewImage = document.getElementById("update_room_img"+img_num)
+                                                    previewImage.src = e.target.result
+                                                    //post 임시
+                                                    document.getElementById("update_room_img"+img_num+"_base64").value = reader.result
+                                                }
+                                                
+                                                // reader가 이미지 읽도록 하기
+                                                reader.readAsDataURL(input.files[0])
+                                            }
                                         }
+                                        // input file에 change 이벤트 부여
+                                        const inputImage1 = document.getElementById("update_room_img1_file")
+                                        inputImage1.addEventListener("change", e => {
+                                            readImage(e.target, 1)                                            
+                                        })
+                                        const inputImage2 = document.getElementById("update_room_img2_file")
+                                        inputImage2.addEventListener("change", e => {
+                                            readImage(e.target, 2)
+                                        })
+                                        const inputImage3 = document.getElementById("update_room_img3_file")
+                                        inputImage3.addEventListener("change", e => {
+                                            readImage(e.target, 3)
+                                        })
+                                        const inputImage4 = document.getElementById("update_room_img4_file")
+                                        inputImage4.addEventListener("change", e => {
+                                            readImage(e.target, 4)
+                                        })
+                                        const inputImage5 = document.getElementById("update_room_img5_file")
+                                        inputImage5.addEventListener("change", e => {
+                                            readImage(e.target, 5)
+                                        })      
+                                        room_update_btn.addEventListener("click", function(e) {
+                                            room_update_form.submit();
+                                        });                                                                             
+                                        
 
                                         //상품삭제 관리버튼
                                         function room_delete_modal(get_room_id) {
@@ -754,7 +970,52 @@ $main_res_user_cnt = mysqli_num_rows(mysqli_query($mysqli, $main_res_user_cnt_sq
                                             document.getElementById("del_room_id").innerText = room_id;
                                             document.getElementById("room_delete_modal_btn").setAttribute("onclick" ,"location.href='../php/room_delete.php?room_id="+room_id+"'");
                                             
+                                        }                                        
+                                                                              
+                                        //상품추가 이미지 미리보기
+                                        function readImage2(input,img_num) {
+                                            // 인풋 태그에 파일이 있는 경우
+                                            if(input.files && input.files[0]) {
+                                                // 이미지 파일인지 검사 (생략)
+                                                // FileReader 인스턴스 생성
+                                                const reader = new FileReader()
+                                                // 이미지가 로드가 된 경우
+                                                reader.onload = e => {
+                                                    const previewImage = document.getElementById("insert_room_img"+img_num)
+                                                    previewImage.src = e.target.result                                                    
+                                                    document.getElementById("insert_room_img"+img_num+"_base64").value = reader.result
+                                                }
+                                                
+                                                // reader가 이미지 읽도록 하기
+                                                reader.readAsDataURL(input.files[0])
+                                            }
                                         }
+                                        // input file에 change 이벤트 부여
+                                        const insertImage1 = document.getElementById("insert_room_img1_file")
+                                        insertImage1.addEventListener("change", e => {
+                                            readImage2(e.target, 1)                                            
+                                        })
+                                        const insertImage2 = document.getElementById("insert_room_img2_file")
+                                        insertImage2.addEventListener("change", e => {
+                                            readImage2(e.target, 2)
+                                        })
+                                        const insertImage3 = document.getElementById("insert_room_img3_file")
+                                        insertImage3.addEventListener("change", e => {
+                                            readImage2(e.target, 3)
+                                        })
+                                        const insertImage4 = document.getElementById("insert_room_img4_file")
+                                        insertImage4.addEventListener("change", e => {
+                                            readImage2(e.target, 4)
+                                        })
+                                        const insertImage5 = document.getElementById("insert_room_img5_file")
+                                        insertImage5.addEventListener("change", e => {
+                                            readImage2(e.target, 5)
+                                        })
+                                        
+                                        //상품 추가 모달 제출
+                                        room_insert_modal_btn.addEventListener("click", function(e) {
+                                            room_insert_form.submit();
+                                        });
                                     </script>
                                 </tbody>
                             </table>
