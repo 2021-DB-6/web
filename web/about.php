@@ -81,7 +81,8 @@
             </div>
             <br>
             <a>부트스트랩과, php, mariadb를 이용하여 구현하였습니다</a>
-            <a>웹 서비스는 mariadb10와 apache2 구동되고있으며 연결한 도매인은 https://2021dbp6.two4.de/ 입니다.</a>
+            <a>웹 서비스는 mariadb10와 apache2.4,php7.3 구동되고있으며 가상호스토로 https://2021dbp6.two4.de/ 로 실행 중 입니다.</a>
+            <a>언제든지 사이트가 서버에서 내려갈수 있습니다!</a>
         </div>
     </section>
     <!-- Footer-->
