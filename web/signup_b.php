@@ -51,7 +51,7 @@
                             <li><a class="dropdown-item" href="room_list.php?type=pension">펜션</a></li>
                             <li><a class="dropdown-item" href="room_list.php?type=hotel">호텔</a></li>
                             <li><a class="dropdown-item" href="room_list.php?type=motel">모텔</a></li>
-                            <li><a class="dropdown-item" href="room_list.php?type=poolvilla">풀빌라</a></li>
+                            <li><a class="dropdown-item" href="room_list.php?type=guest">게스트하우스</a></li>
                             <li><a class="dropdown-item" href="room_list.php?type=resort">리조트/콘도</a></li>
                         </ul>
                     </li>
