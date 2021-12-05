@@ -190,41 +190,137 @@ if (isset($_GET['num'])) {
                             <h1 class="h2">Dashboard</h1>
                             <div class="btn-toolbar mb-2 mb-md-0">
                                 <div class="btn-group mr-2">
-                                    <button class="btn btn-sm btn-outline-secondary">Share</button>
-                                    <button class="btn btn-sm btn-outline-secondary">Export</button>
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="location.href='mypage.php'">계정 마이페이지</button>
                                 </div>
                             </div>
                         </div>
+                            <div class="row align-items-md-stretch mb-4">
+                                <!--회원정보-->
+                                <div class="col-md-6">
+                                    <div class="p-4 text-white bg-dark rounded-3">
+                                        <p><?= $_SESSION['user_name']; ?> 님 반가워요!</p>
+                                        <p>누적 총 예약 수 : <?= $main_res_cnt_row['cnt']; ?> 건</p>
+                                        <p>방문한 총 고객 수 : <?= $main_res_user_cnt; ?> 건 (중복제외)</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="p-5 bg-light border rounded-3 d-grid gap-2 mx-auto">
+                                        <!--회원 탈퇴, 비밀번호 변경-->
+                                        <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#passwd_modal">비밀번호 변경</button>
+                                        <!--비밀번호 변경 Modal -->
+                                        <div class="modal fade" id="passwd_modal" tabindex="-1" aria-labelledby="passwd_modal_Label" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="passwd_modal_Label">비밀번호 변경</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <form method="POST" action="../php/passwd_update.php" id="passwd_update-form" class="validation-form">
+                                                                <div class="md-6 mb-3">
+                                                                    <label for="old_password">기존 비밀번호</label>
+                                                                    <input type="password" class="form-control" name="old_password" id="old_password" placeholder="" value="" required />
+                                                                    <div class="invalid-feedback">비밀번호을 입력해주세요.</div>
+                                                                </div>
+                                                                <div class="md-6 mb-3">
+                                                                    <label for="new_password0">변경할 비밀번호</label>
+                                                                    <input type="password" class="form-control" name="new_password0" id="new_password0" placeholder="" value="" required />
+                                                                    <div class="invalid-feedback">비밀번호을 입력해주세요.</div>
+                                                                </div>
+                                                                <div class="md-6 mb-3">
+                                                                    <label for="new_password1">변경할 비밀번호 재입력</label>
+                                                                    <input type="password" class="form-control" name="new_password1" id="new_password1" placeholder="" value="" required />
+                                                                    <div class="invalid-feedback">비밀번호을 입력해주세요.</div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                                        <button type="button" class="btn btn-primary" id="passwd_btn">비밀번호 변경</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#user_delete_modal">서비스 탈퇴</button>
+                                        <!--탈퇴 모달-->
+                                        <div class="modal fade" id="user_delete_modal" tabindex="-1" aria-labelledby="user_delete_modal_Label" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="user_delete_modal_Label">서비스 탈퇴</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <h4>서비스를 탈퇴 하시겠습니까?</h4>
+                                                        <hr>
+                                                        <P>서비스 탈퇴 후 예약기록을 포함한 모든 회원기록은 복구할수 없습니다!</P>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                                        <button type="button" class="btn btn-danger" onclick="location.href='../php/user_delete.php';">서비스 탈퇴</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         <h2>신규회원 현황</h2>
                         <div class="table-responsive">
                             <table class="table table-striped table-sm">
                                 <thead>
                                     <tr>
-                                        <th>#</th>
                                         <th>고유번호</th>
                                         <th>이메일</th>
                                         <th>이름</th>
                                         <th>구분</th>
-                                        <th>관리</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
+                                    //메인최근 회원가입 현황
+                                    $sql_main_user10 = "SELECT * FROM users ORDER BY user_id DESC LIMIT 10;";
 
+                                    $main_user10_result = mysqli_query($mysqli, $sql_main_user10);
+                                    while ($user10_list = $main_user10_result->fetch_array()) {
+                                        if($user10_list['user_groups'] === 'user'){
+                                            $user_groups = "일반회원";
+                                        } else if($user10_list['user_groups'] === 'business'){
+                                            $user_groups = "비지니스회원";
+                                        } else if($user10_list['user_groups'] === 'admin'){
+                                            $user_groups = "관리자";
+                                        }
                                     ?>
-                                    <tr>
-                                        <td>1,001</td>
-                                        <td>Lorem</td>
-                                        <td>ipsum</td>
-                                        <td>dolor</td>
-                                        <td>드롭다운관리</td>
-                                    </tr>
+                                        <tr>
+                                            <td><?= $user10_list['user_id'] ?></td>
+                                            <td><?= $user10_list['user_email'] ?></td>
+                                            <td><?= $user10_list['user_name'] ?></td>
+                                            <td><?= $user_groups ?></td>
+                                        </tr>
                                     <?php
-
+                                    }
                                     ?>
                                 </tbody>
                             </table>
                         </div>
+                        <script>
+                            const passwd_update_form = document.querySelector("#passwd_update-form");
+                            const passwd_btn = document.querySelector("#passwd_btn");
+                            const old_password = document.querySelector("#old_password");
+                            const new_password0 = document.querySelector("#new_password0");
+                            const new_password1 = document.querySelector("#new_password1");
+                            passwd_btn.addEventListener("click", function(e) {
+                                if (new_password0.value && new_password0.value === new_password1.value) {
+
+                                    passwd_update_form.submit();
+                                } else {
+                                    alert("비밀번호가 서로 일치하지 않습니다");
+                                }
+                            });
+                        </script>
                     <?php
                     } else if ($view === "res") {
 
@@ -275,7 +371,7 @@ if (isset($_GET['num'])) {
                                     ?>
                                         <tr>
                                             <td><?= $res_page_list['res_id'] ?></td>
-                                            <td><?= $res_page_list['room_name'] ?>_(<?= $res_page_list['room_id'] ?>)</td>
+                                            <td><a href="room_view.php?room_id=<?= $res_page_list['room_id'] ?>"><?= $res_page_list['room_name'] ?>_(<?= $res_page_list['room_id'] ?>)</a></td>
                                             <td><?= $res_page_list['user_name'] ?>(<?= $res_page_list['user_email'] ?>)</td>
                                             <td><?= $res_page_list['user_tell'] ?></td>
                                             <td><?= $res_page_list['res_start'] ?></td>
@@ -498,6 +594,7 @@ if (isset($_GET['num'])) {
                                     <tr>
                                         <th>고유번호</th>
                                         <th>이름(방이름)</th>
+                                        <th>소유자이름</th>
                                         <th>설명</th>
                                         <th>편의사항</th>
                                         <th>타입</th>
@@ -508,7 +605,7 @@ if (isset($_GET['num'])) {
                                     <?php
                                     //자사가 소유한 상품(방)을 등록 수정
                                     //페이징
-                                    $sql_room_all = "SELECT * FROM room;";
+                                    $sql_room_all = "SELECT * FROM room ORDER BY room_id DESC;";
                                     $total_room_record = mysqli_num_rows(mysqli_query($mysqli, $sql_room_all)); //레코드 총수 카운트
 
                                     $room_list = 15; //페이지당 개수
@@ -527,13 +624,14 @@ if (isset($_GET['num'])) {
 
 
                                     //게시글 가져오기    
-                                    $room_15 = "SELECT * FROM room ORDER BY room.room_id DESC LIMIT " . $room_page_start . ", " . $room_list . ";";
+                                    $room_15 = "SELECT room.*, users.user_name FROM room,users WHERE room.user_id = users.user_id ORDER BY room.room_id DESC LIMIT " . $room_page_start . ", " . $room_list . ";";
                                     $room_list_result = mysqli_query($mysqli, $room_15);
                                     while ($room_page_list = $room_list_result->fetch_array()) {
                                     ?>
                                         <tr>
                                             <td><?= $room_page_list['room_id'] ?></td>
                                             <td><a href="room_view.php?room_id=<?= $room_page_list['room_id'] ?>"><?= $room_page_list['room_name'] ?></a></td>
+                                            <td><?=$room_page_list['user_name'] ?></td>
                                             <td><?= mb_substr($room_page_list['room_text'],0,20) ?></td>
                                             <td><?= mb_substr($room_page_list['room_info'],0,10) ?></td>
                                             <td><?= $room_page_list['room_type'] ?></td>
@@ -954,12 +1052,136 @@ if (isset($_GET['num'])) {
                     ?>
 
                         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                            <h1 class="h2">고객관리</h1>
+                            <h1 class="h2">유저관리</h1>
                         </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>고객고유번호</th>
+                                        <th>고객이름</th>
+                                        <th>고객 이메일</th>
+                                        <th>고객 전화번호</th>
+                                        <th>최근 예약일</th>
+                                        <th>누적 예약</th>
+                                        <th>누적 금액</th>
+                                        <th>관리</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    //페이징
+                                    //d유저테이블에서 기본으로 처리
+                                    $sql_users_all = "SELECT users.user_id FROM reservation, users WHERE reservation.user_id = users.user_id GROUP BY user_id ORDER BY user_id DESC;";
+                                    $total_customer_record = mysqli_num_rows(mysqli_query($mysqli, $sql_users_all)); //레코드 총수 카운트
+
+                                    $customer_list = 15; //페이지당 개수
+                                    $customer_block_cnt = 15;
+                                    $customer_block_num = ceil($num / $customer_block_cnt);
+                                    $customer_block_start = (($customer_block_num - 1) * $customer_block_cnt) + 1; // 블록의 시작 번호  ex) 1,6,11 ...
+                                    $customer_block_end = $customer_block_start + $customer_block_cnt - 1; // 블록의 마지막 번호 ex) 5,10,15 ...
 
 
+                                    $customer_total_page = ceil($total_customer_record / $customer_list); //총페이지 갯수 계산
+                                    if ($customer_block_end > $customer_total_page) {
+                                        $customer_block_end = $customer_total_page;
+                                    }
+                                    $customer_total_block = ceil($customer_total_page / $customer_block_cnt);
+                                    $customer_page_start = ($num - 1) * $customer_list;
+
+
+                                    //회원별 예약 정보 가져오기 
+                                    $customer_15 ="SELECT users.*, COUNT(reservation.user_id) AS cnt, SUM(reservation.res_pay) AS pay_sum, MAX(reservation.res_pay_date) AS last_pay_day FROM reservation, users WHERE reservation.user_id = users.user_id GROUP BY user_id ORDER BY user_id DESC LIMIT " . $customer_page_start . ", " . $customer_list . ";";                                   
+                                    $customer_list_result = mysqli_query($mysqli, $customer_15);
+                                    while ($customer_page_list = $customer_list_result->fetch_array()) {
+                                    ?>
+                                        <tr>
+                                            <td><?= $customer_page_list['user_id'] ?></td>
+                                            <td><?= $customer_page_list['user_name'] ?></td>
+                                            <td><?= $customer_page_list['user_email'] ?></td>
+                                            <td><?= $customer_page_list['user_tell'] ?></td>
+                                            <td><?= $customer_page_list['last_pay_day'] ?></td>
+                                            <td><?= $customer_page_list['cnt'] ?> 건</td>
+                                            <td><?= $customer_page_list['pay_sum'] ?> ₩</td>
+                                            <td>
+                                                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#customer_select_modal" onclick="customer_upate_btn(<?= $customer_page_list['user_id'] ?>)">자세히</button>
+                                            </td>
+                                        </tr>
+                                    <?php
+                                    }
+                                    ?>
+                                    
+                                    
+                                    <!--회원별 상세정보 모달-->
+                                    <div class="modal fade" id="customer_select_modal" tabindex="-1" aria-labelledby="customer_select_modal_Label" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="customer_select_modal_Label">상세정보</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    회원 번호 : <span id="select_modal_customer_id"></span> 번
+                                                    <br>
+                                                                                                        
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <script>                                        
+                                        //회원예약기록(자사상품만) 관리버튼
+                                        function customer_upate_btn(getdate) {
+                                            var customer_id = getdate;
+                                            
+                                            document.getElementById('select_modal_customer_id').innerText = customer_id;
+                                            
+                                        }                                    
+                                    </script>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <ul class="pagination justify-content-center">
+                                <?php
+                                if ($num <= 1) {
+                                } else {
+                                    echo "<li class='page-item'><a class='page-link' href='business.php?num=1&view=customer'>&laquo;</a></li>";
+                                }
+                                if ($num <= 1) {
+                                } else {
+                                    $pre = $num - 1;
+                                    echo "<li class='page-item'><a class='page-link' href='business.php?num=$pre&view=customer'>&#60;</a></li>";
+                                }
+
+                                for ($i = $customer_block_start; $i <= $customer_block_end; $i++) {
+                                    if ($page == $i) {
+                                        echo "<li class='page-item active'><a class='page-link'>$i</a></li>"; //현재페이지
+                                    } else {
+                                        echo "<li class='page-item'><a class='page-link' href='business.php?num=$i&view=customer'>$i</a></li>";
+                                    }
+                                }
+
+                                if ($num >= $customer_total_page) {
+                                    // 빈 값
+                                } else {
+                                    $next = $num + 1;
+                                    echo "<li class='page-item'><a class='page-link' href='business.php?num=$next&view=customer'>&gt;</a></li>";
+                                }
+
+                                if ($num >= $customer_total_page) {
+                                    // 빈 값
+                                } else {
+                                    echo "<li class='page-item'><a class='page-link' href='business.php?num=$customer_total_page&view=customer'>&raquo;</a></li>";
+                                }
+
+                                ?>
+                            </ul>
+                        </div>
                     <?php
-
                     } else {
                         echo "ERROR!";
                     }

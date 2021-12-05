@@ -69,10 +69,19 @@
     <section class="py-5">
         <div class="container">
             <h2>
-                설명
+                DB프로그래밍 6조
             </h2>
             <hr>
-            <a>우선</a>
+            <div>
+                <h5>
+                    참조링크
+                </h5>
+                <hr>
+                <a href="https://github.com/2021-DB-6/web">깃허브</a>               
+            </div>
+            <br>
+            <a>부트스트랩과, php, mariadb를 이용하여 구현하였습니다</a>
+            <a>웹 서비스는 mariadb10와 apache2 구동되고있으며 연결한 도매인은 https://2021dbp6.two4.de/ 입니다.</a>
         </div>
     </section>
     <!-- Footer-->

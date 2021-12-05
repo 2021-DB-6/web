@@ -186,8 +186,8 @@ $main_res_user_cnt = mysqli_num_rows(mysqli_query($mysqli, $main_res_user_cnt_sq
                             <div style="position:absolute;width:200%;height:200%;left:0; top:0"></div>
                         </div>
                     </div>
-                    <!---->
                     <?php
+                    //==================================================
                     if ($view === "main") {
 
                     ?>
@@ -331,7 +331,7 @@ $main_res_user_cnt = mysqli_num_rows(mysqli_query($mysqli, $main_res_user_cnt_sq
                         </script>
                     <?php
                     } else if ($view === "res") {
-
+                        //--------------------------------------------------------
                     ?>
 
                         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -380,7 +380,7 @@ $main_res_user_cnt = mysqli_num_rows(mysqli_query($mysqli, $main_res_user_cnt_sq
                                     ?>
                                         <tr>
                                             <td><?= $res_page_list['res_id'] ?></td>
-                                            <td><?= $res_page_list['room_name'] ?>_(<?= $res_page_list['room_id'] ?>)</td>
+                                            <td><a href="room_view.php?room_id=<?= $res_page_list['room_id'] ?>"><?= $res_page_list['room_name'] ?>_(<?= $res_page_list['room_id'] ?>)</a></td>
                                             <td><?= $res_page_list['user_name'] ?>(<?= $res_page_list['user_email'] ?>)</td>
                                             <td><?= $res_page_list['user_tell'] ?></td>
                                             <td><?= $res_page_list['res_start'] ?></td>
@@ -619,7 +619,7 @@ $main_res_user_cnt = mysqli_num_rows(mysqli_query($mysqli, $main_res_user_cnt_sq
                                     <?php
                                     //자사가 소유한 상품(방)을 등록 수정
                                     //페이징
-                                    $sql_room_all = "SELECT * FROM room WHERE room.user_id = " . $_SESSION['user_id'] . ";";
+                                    $sql_room_all = "SELECT * FROM room WHERE room.user_id = " . $_SESSION['user_id'] . " ORDER BY room.room_id DESC;";
                                     $total_room_record = mysqli_num_rows(mysqli_query($mysqli, $sql_room_all)); //레코드 총수 카운트
 
                                     $room_list = 15; //페이지당 개수
@@ -1063,23 +1063,143 @@ $main_res_user_cnt = mysqli_num_rows(mysqli_query($mysqli, $main_res_user_cnt_sq
                     } else if ($view === "customer") {
                         //-----------------------------------------------------------------------------------------------------------------
                         //자사 상품을 이용한 고객의 리스트를 출력
-                        //SELECT COUNT(users.user_id) AS cnt FROM reservation, users WHERE reservation.user_id = users.user_id AND reservation.user_id=1 ; //특정고객이 예약한 횟수
                     ?>
 
                         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                            <h1 class="h2">고객관리</h1>
+                            <h1 class="h2">이용 고객관리</h1>
                         </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>고객고유번호</th>
+                                        <th>고객이름</th>
+                                        <th>고객 이메일</th>
+                                        <th>고객 전화번호</th>
+                                        <th>최근 예약일</th>
+                                        <th>누적 예약</th>
+                                        <th>누적 금액</th>
+                                        <th>관리</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    //페이징
+                                    //d유저테이블에서 기본으로 처리
+                                    $sql_users_all = "SELECT users.user_id, MAX(reservation.res_pay_date) AS last_pay_day FROM reservation, users WHERE reservation.user_id = users.user_id AND reservation.room_id IN (SELECT room.room_id FROM room WHERE room.user_id =" . $_SESSION['user_id'] . ") GROUP BY user_id ORDER BY last_pay_day DESC;";
+                                    $total_customer_record = mysqli_num_rows(mysqli_query($mysqli, $sql_users_all)); //레코드 총수 카운트
+
+                                    $customer_list = 15; //페이지당 개수
+                                    $customer_block_cnt = 15;
+                                    $customer_block_num = ceil($num / $customer_block_cnt);
+                                    $customer_block_start = (($customer_block_num - 1) * $customer_block_cnt) + 1; // 블록의 시작 번호  ex) 1,6,11 ...
+                                    $customer_block_end = $customer_block_start + $customer_block_cnt - 1; // 블록의 마지막 번호 ex) 5,10,15 ...
 
 
+                                    $customer_total_page = ceil($total_customer_record / $customer_list); //총페이지 갯수 계산
+                                    if ($customer_block_end > $customer_total_page) {
+                                        $customer_block_end = $customer_total_page;
+                                    }
+                                    $customer_total_block = ceil($customer_total_page / $customer_block_cnt);
+                                    $customer_page_start = ($num - 1) * $customer_list;
+
+
+                                    //회원별 예약 정보 가져오기 
+                                    $customer_15 ="SELECT users.*, COUNT(reservation.user_id) AS cnt, SUM(reservation.res_pay) AS pay_sum, MAX(reservation.res_pay_date) AS last_pay_day FROM reservation, users WHERE reservation.user_id = users.user_id AND reservation.room_id IN (SELECT room.room_id FROM room WHERE room.user_id =" . $_SESSION['user_id'] . ") GROUP BY user_id ORDER BY last_pay_day DESC LIMIT " . $customer_page_start . ", " . $customer_list . ";";                                   
+                                    $customer_list_result = mysqli_query($mysqli, $customer_15);
+                                    while ($customer_page_list = $customer_list_result->fetch_array()) {
+                                    ?>
+                                        <tr>
+                                            <td><?= $customer_page_list['user_id'] ?></td>
+                                            <td><?= $customer_page_list['user_name'] ?></td>
+                                            <td><?= $customer_page_list['user_email'] ?></td>
+                                            <td><?= $customer_page_list['user_tell'] ?></td>
+                                            <td><?= $customer_page_list['last_pay_day'] ?></td>
+                                            <td><?= $customer_page_list['cnt'] ?> 건</td>
+                                            <td><?= $customer_page_list['pay_sum'] ?> ₩</td>
+                                            <td>
+                                                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#customer_select_modal" onclick="customer_upate_btn(<?= $customer_page_list['user_id'] ?>)">자세히</button>
+                                            </td>
+                                        </tr>
+                                    <?php
+                                    }
+                                    ?>
+                                    
+                                    
+                                    <!--회원별 상세정보 모달-->
+                                    <div class="modal fade" id="customer_select_modal" tabindex="-1" aria-labelledby="customer_select_modal_Label" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="customer_select_modal_Label">상세정보</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    회원 번호 : <span id="select_modal_customer_id"></span> 번
+                                                    <br>
+                                                                                                        
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <script>                                        
+                                        //회원예약기록(자사상품만) 관리버튼
+                                        function customer_upate_btn(getdate) {
+                                            var customer_id = getdate;
+                                            
+                                            document.getElementById('select_modal_customer_id').innerText = customer_id;
+                                            
+                                        }                                    
+                                    </script>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <ul class="pagination justify-content-center">
+                                <?php
+                                if ($num <= 1) {
+                                } else {
+                                    echo "<li class='page-item'><a class='page-link' href='business.php?num=1&view=customer'>&laquo;</a></li>";
+                                }
+                                if ($num <= 1) {
+                                } else {
+                                    $pre = $num - 1;
+                                    echo "<li class='page-item'><a class='page-link' href='business.php?num=$pre&view=customer'>&#60;</a></li>";
+                                }
+
+                                for ($i = $customer_block_start; $i <= $customer_block_end; $i++) {
+                                    if ($page == $i) {
+                                        echo "<li class='page-item active'><a class='page-link'>$i</a></li>"; //현재페이지
+                                    } else {
+                                        echo "<li class='page-item'><a class='page-link' href='business.php?num=$i&view=customer'>$i</a></li>";
+                                    }
+                                }
+
+                                if ($num >= $customer_total_page) {
+                                    // 빈 값
+                                } else {
+                                    $next = $num + 1;
+                                    echo "<li class='page-item'><a class='page-link' href='business.php?num=$next&view=customer'>&gt;</a></li>";
+                                }
+
+                                if ($num >= $customer_total_page) {
+                                    // 빈 값
+                                } else {
+                                    echo "<li class='page-item'><a class='page-link' href='business.php?num=$customer_total_page&view=customer'>&raquo;</a></li>";
+                                }
+
+                                ?>
+                            </ul>
+                        </div>
                     <?php
-
                     } else {
                         echo "ERROR";
                     }
                     ?>
-
-
-
                 </main>
             </div>
         </div>
