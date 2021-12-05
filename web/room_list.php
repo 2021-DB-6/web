@@ -120,7 +120,7 @@
                     $total_record = mysqli_num_rows(mysqli_query($mysqli, $sql_room_t)); //레코드 총수 카운트
                     
                     $list = 12; //페이지당 개수
-			  		$block_cnt = 12; 
+			  		$block_cnt = 10;
 			  		$block_num = ceil($page / $block_cnt); 
 			  		$block_start = (($block_num - 1) * $block_cnt) + 1; // 블록의 시작 번호  ex) 1,6,11 ...
 			    	$block_end = $block_start + $block_cnt - 1; // 블록의 마지막 번호 ex) 5,10,15 ...

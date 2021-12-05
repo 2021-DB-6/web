@@ -359,7 +359,7 @@ $main_res_user_cnt = mysqli_num_rows(mysqli_query($mysqli, $main_res_user_cnt_sq
                                     $total_res_record = mysqli_num_rows(mysqli_query($mysqli, $sql_res_all)); //레코드 총수 카운트
 
                                     $res_list = 15; //페이지당 개수
-                                    $res_block_cnt = 15;
+                                    $res_block_cnt = 10;
                                     $res_block_num = ceil($num / $res_block_cnt);
                                     $res_block_start = (($res_block_num - 1) * $res_block_cnt) + 1; // 블록의 시작 번호  ex) 1,6,11 ...
                                     $res_block_end = $res_block_start + $res_block_cnt - 1; // 블록의 마지막 번호 ex) 5,10,15 ...
@@ -623,7 +623,7 @@ $main_res_user_cnt = mysqli_num_rows(mysqli_query($mysqli, $main_res_user_cnt_sq
                                     $total_room_record = mysqli_num_rows(mysqli_query($mysqli, $sql_room_all)); //레코드 총수 카운트
 
                                     $room_list = 15; //페이지당 개수
-                                    $room_block_cnt = 15;
+                                    $room_block_cnt = 10;
                                     $room_block_num = ceil($num / $room_block_cnt);
                                     $room_block_start = (($room_block_num - 1) * $room_block_cnt) + 1; // 블록의 시작 번호  ex) 1,6,11 ...
                                     $room_block_end = $room_block_start + $room_block_cnt - 1; // 블록의 마지막 번호 ex) 5,10,15 ...
@@ -1090,7 +1090,7 @@ $main_res_user_cnt = mysqli_num_rows(mysqli_query($mysqli, $main_res_user_cnt_sq
                                     $total_customer_record = mysqli_num_rows(mysqli_query($mysqli, $sql_users_all)); //레코드 총수 카운트
 
                                     $customer_list = 15; //페이지당 개수
-                                    $customer_block_cnt = 15;
+                                    $customer_block_cnt = 10;
                                     $customer_block_num = ceil($num / $customer_block_cnt);
                                     $customer_block_start = (($customer_block_num - 1) * $customer_block_cnt) + 1; // 블록의 시작 번호  ex) 1,6,11 ...
                                     $customer_block_end = $customer_block_start + $customer_block_cnt - 1; // 블록의 마지막 번호 ex) 5,10,15 ...
