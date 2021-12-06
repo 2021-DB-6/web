@@ -8,8 +8,12 @@
     }
     if(isset($_GET['type'])){
         $type = "'" . $_GET['type'] . "'";
+        //링크 처리
+        $view_url = "room_list.php?page=";
+        $view_type_url = "&type=".$_GET['type'];
     } else {
         $type = "NULL";
+        $view_url = "room_list.php?page=";
     }
 ?>
 
@@ -171,20 +175,20 @@
                         if($page <= 1){
 
                         } else {
-                            echo "<li class='page-item'><a class='page-link' href='room_list.php?page=1'>&laquo;</a></li>";
+                            echo "<li class='page-item'><a class='page-link' href='$view_url"."1"."$view_type_url'>&laquo;</a></li>";
                         }
                         if($page <= 1){
 
                         } else {
                             $pre = $page-1;
-                            echo "<li class='page-item'><a class='page-link' href='room_list.php?page=$pre'>&#60;</a></li>";
+                            echo "<li class='page-item'><a class='page-link' href='$view_url$pre$view_type_url'>&#60;</a></li>";
                         }
                         
                         for($i = $block_start; $i <= $block_end; $i++){
 				    		if($page == $i){
 				    			echo "<li class='page-item active'><a class='page-link'>$i</a></li>"; //현재페이지
 				    		} else {
-				    			echo "<li class='page-item'><a class='page-link' href='room_list.php?page=$i'>$i</a></li>";
+				    			echo "<li class='page-item'><a class='page-link' href='$view_url$i$view_type_url'>$i</a></li>";
 				    		}
 				    	}
 				    	
@@ -192,15 +196,14 @@
 				    		// 빈 값
 				    	} else {
 				    		$next = $page + 1;
-				    		echo "<li class='page-item'><a class='page-link' href='room_list.php?page=$next'>&gt;</a></li>";
+				    		echo "<li class='page-item'><a class='page-link' href='$view_url$next$view_type_url'>&gt;</a></li>";
 				    	}
 					   	
 				    	if($page >= $total_page){
 				    		// 빈 값
 				    	} else {
-				    		echo "<li class='page-item'><a class='page-link' href='room_list.php?page=$total_page'>&raquo;</a></li>";
+				    		echo "<li class='page-item'><a class='page-link' href='$view_url$total_page$view_type_url'>&raquo;</a></li>";
 				    	}
-                    
                     ?>
                 </ul>
             </div>
@@ -216,6 +219,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="../js/scripts.js"></script>
+    <script>console.log(<?= isset($type) ?>);</script>
 </body>
 
 </html>
