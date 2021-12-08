@@ -76,31 +76,31 @@
                             } else {  //로그인후
                                 if($_SESSION['usergroups']=='user'){ //일반유저일떄
                     ?>
-                    <button class="btn btn-outline-dark ms-2" type="button" onclick="location.href='web/mypage.php'">
+                    <button class="btn btn-outline-dark ms-2" type="button" onclick="location.href='mypage.php'">
                         <?php echo $_SESSION['userId'] ?>&nbsp;님
                     </button>
-                    <button class="btn btn-outline-dark ms-1" type="button" onclick="location.href='php/logout.php'">
+                    <button class="btn btn-outline-dark ms-1" type="button" onclick="location.href='../php/logout.php'">
                         <i class="bi bi-box-arrow-in-right me-1"></i>
                         LOGOUT
                     </button>
                     <?php            
                                 }else if($_SESSION['usergroups']=='business'){ //비지니스회원일떄
                                 ?>
-                    <button class="btn btn-outline-dark ms-2" type="button" onclick="location.href='web/business.php'">
+                    <button class="btn btn-outline-dark ms-2" type="button" onclick="location.href='business.php'">
                         <?php echo $_SESSION['userId'] ?>&nbsp;님
                     </button>
 
-                    <button class="btn btn-outline-dark ms-1" type="button" onclick="location.href='php/logout.php'">
+                    <button class="btn btn-outline-dark ms-1" type="button" onclick="location.href='../php/logout.php'">
                         <i class="bi bi-box-arrow-in-right me-1"></i>
                         LOGOUT
                     </button>
                     <?php
                                 }else { //관리자일때
                                 ?>
-                    <button class="btn btn-outline-dark ms-2" type="button" onclick="location.href='web/admin.php'">
+                    <button class="btn btn-outline-dark ms-2" type="button" onclick="location.href='admin.php'">
                         <?php echo $_SESSION['userId'] ?>&nbsp;님
                     </button>
-                    <button class="btn btn-outline-dark ms-1" type="button" onclick="location.href='php/logout.php'">
+                    <button class="btn btn-outline-dark ms-1" type="button" onclick="location.href='../php/logout.php'">
                         <i class="bi bi-box-arrow-in-right me-1"></i>
                         LOGOUT
                     </button>
