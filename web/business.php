@@ -19,7 +19,6 @@ if (isset($_GET['num'])) {
 $main_res_cnt_sql = "SELECT COUNT(*) AS cnt FROM reservation WHERE reservation.room_id IN (SELECT room.room_id FROM room WHERE room.user_id = " . $_SESSION['user_id'] . ")";
 $main_res_cnt_row = mysqli_fetch_array(mysqli_query($mysqli, $main_res_cnt_sql));
 //총 방문한 고객수(중복예약 제외)
-//SELECT users.user_id FROM reservation,users,room WHERE reservation.room_id IN (SELECT room.room_id FROM room WHERE room.user_id = 5) AND reservation.user_id = users.user_id AND reservation.room_id = room.room_id GROUP BY user_id
 $main_res_user_cnt_sql = "SELECT users.user_id FROM reservation,users,room WHERE reservation.room_id IN (SELECT room.room_id FROM room WHERE room.user_id =  " . $_SESSION['user_id'] . ") AND reservation.user_id = users.user_id AND reservation.room_id = room.room_id GROUP BY user_id;";
 $main_res_user_cnt = mysqli_num_rows(mysqli_query($mysqli, $main_res_user_cnt_sql));
 
@@ -207,7 +206,7 @@ $main_res_user_cnt = mysqli_num_rows(mysqli_query($mysqli, $main_res_user_cnt_sq
                                     <div class="p-4 text-white bg-dark rounded-3">
                                         <p><?= $_SESSION['user_name']; ?>(<?= $_SESSION['user_business_num']; ?>) 님 반가워요!</p>
                                         <p>누적 총 예약 수 : <?= $main_res_cnt_row['cnt']; ?> 건</p>
-                                        <p>방문한 총 고객 수 : <?= $main_res_user_cnt; ?> 건 (중복제외)</p>
+                                        <p>방문한 총 고객 수 : <?= $main_res_user_cnt; ?> 명 (중복제외)</p>
                                     </div>
                                 </div>
                                 <div class="col-md-6">

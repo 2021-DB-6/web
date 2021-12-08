@@ -12,6 +12,15 @@ if (isset($_GET['num'])) {
 } else {
     $num = 1;
 }
+
+//누적 예약수   
+$main_res_cnt_sql = "SELECT COUNT(*) AS cnt FROM reservation";
+$main_res_cnt_row = mysqli_fetch_array(mysqli_query($mysqli, $main_res_cnt_sql));
+//총 방문한 고객수(중복예약 제외)
+$main_user_cnt_sql = "SELECT COUNT(*) AS cnt FROM users";
+$main_user_cnt = mysqli_num_rows(mysqli_query($mysqli, $main_user_cnt_sql));
+
+
 ?>
 
 <!DOCTYPE html>
@@ -200,7 +209,7 @@ if (isset($_GET['num'])) {
                                     <div class="p-4 text-white bg-dark rounded-3">
                                         <p><?= $_SESSION['user_name']; ?> 님 반가워요!</p>
                                         <p>누적 총 예약 수 : <?= $main_res_cnt_row['cnt']; ?> 건</p>
-                                        <p>방문한 총 고객 수 : <?= $main_res_user_cnt; ?> 건 (중복제외)</p>
+                                        <p>총 회원 수 : <?= $main_user_cnt ; ?> 명</p>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
