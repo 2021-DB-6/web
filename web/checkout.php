@@ -59,7 +59,7 @@
                             } else {  //로그인후
                                 if($_SESSION['usergroups']=='user'){ //일반유저일떄
                     ?>
-                    <button class="btn btn-outline-dark ms-2" type="button" onclick="location.href='web/mypage.php'">
+                    <button class="btn btn-outline-dark ms-2" type="button" onclick="location.href='mypage.php'">
                         <?php echo $_SESSION['userId'] ?>&nbsp;님
                     </button>
                     <button class="btn btn-outline-dark ms-1" type="button" onclick="location.href='../php/logout.php'">
