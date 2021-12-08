@@ -120,7 +120,7 @@
                 
                 <?php
                     //페이징
-                    $sql_room_t = "SELECT * FROM room WHERE room_type = COALESCE($type, room_type);";
+                    $sql_room_t = "SELECT * FROM room WHERE room_type = COALESCE($type, room_type) AND room_id != 0 ;";
                     $total_record = mysqli_num_rows(mysqli_query($mysqli, $sql_room_t)); //레코드 총수 카운트
                     
                     $list = 12; //페이지당 개수
@@ -139,7 +139,7 @@
 
                 
                     //게시글 가져오기    
-                    $sql2= "SELECT * FROM room WHERE room_type = COALESCE($type, room_type) ORDER BY room_id DESC LIMIT $page_start, $list;";
+                    $sql2= "SELECT * FROM room WHERE room_type = COALESCE($type, room_type) AND room_id != 0 ORDER BY room_id DESC LIMIT $page_start, $list;";
                     $list_result = mysqli_query($mysqli, $sql2);
                     while($roomlist = $list_result->fetch_array()){
                         ?>
